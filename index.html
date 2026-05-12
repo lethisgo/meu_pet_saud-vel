@@ -1,417 +1,231 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<link rel="apple-touch-icon" href="icon.png">
-<link rel="icon" href="icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>NutriPet 🌱</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
-
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #22263a;
-    --accent: #7cfc9f;
-    --accent2: #f9a825;
-    --accent3: #64b5f6;
-    --danger: #ef5350;
-    --text: #e8eaf0;
-    --text2: #8b90a7;
-    --radius: 20px;
-    --radius-sm: 12px;
-    --pet-primary: #a8e6cf;
-    --pet-secondary: #4caf50;
-    --pet-eye: #1b5e20;
+    --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+    --accent:#7cfc9f;--accent2:#f9a825;--accent3:#64b5f6;
+    --danger:#ef5350;--text:#e8eaf0;--text2:#8b90a7;
+    --radius:20px;--radius-sm:12px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    max-width: 430px;
-    margin: 0 auto;
-    overflow-x: hidden;
-    padding-bottom: 90px;
-  }
-  .status-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 20px 4px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px; color: var(--text2);
-  }
-  .header {
-    padding: 10px 20px 0;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .app-name { font-size: 22px; font-weight: 900; color: var(--accent); letter-spacing: -0.5px; }
-  .streak-badge {
-    background: linear-gradient(135deg, #f9a825, #ff6f00);
-    border-radius: 30px; padding: 6px 14px;
-    font-size: 13px; font-weight: 800; color: #fff;
-    display: flex; align-items: center; gap: 5px;
-  }
-  .pet-area {
-    display: flex; flex-direction: column; align-items: center;
-    padding: 10px 20px 0; position: relative;
-  }
-  .pet-scene {
-    width: 200px; height: 200px;
-    position: relative; display: flex; align-items: center; justify-content: center;
-  }
-  .pet-aura {
-    position: absolute; border-radius: 50%;
-    width: 160px; height: 160px;
-    transition: all 0.8s ease; filter: blur(30px);
-  }
-  .pet-svg { position: relative; z-index: 2; transition: all 0.5s ease; cursor: pointer; }
-  .pet-name-display {
-    font-size: 16px; font-weight: 900; color: var(--accent);
-    margin-top: -6px; letter-spacing: 0.5px;
-  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden;padding-bottom:90px}
+  .status-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px 4px;font-family:'Space Mono',monospace;font-size:12px;color:var(--text2)}
+  .header{padding:10px 20px 0;display:flex;justify-content:space-between;align-items:center}
+  .app-name{font-size:22px;font-weight:900;color:var(--accent);letter-spacing:-0.5px}
+  .streak-badge{background:linear-gradient(135deg,#f9a825,#ff6f00);border-radius:30px;padding:6px 14px;font-size:13px;font-weight:800;color:#fff;display:flex;align-items:center;gap:5px}
+  .pet-area{display:flex;flex-direction:column;align-items:center;padding:10px 20px 0;position:relative}
+  .pet-scene{width:200px;height:200px;position:relative;display:flex;align-items:center;justify-content:center}
+  .pet-aura{position:absolute;border-radius:50%;width:160px;height:160px;transition:all 0.8s ease;filter:blur(30px)}
+  .pet-svg{position:relative;z-index:2;transition:all 0.5s ease;cursor:pointer}
+  .pet-name-display{font-size:16px;font-weight:900;color:var(--accent);margin-top:-6px;letter-spacing:0.5px}
+  .stats-row{display:flex;gap:10px;width:100%;padding:10px 20px 0}
+  .stat-card{flex:1;background:var(--surface);border-radius:var(--radius-sm);padding:12px;display:flex;flex-direction:column;gap:6px}
+  .stat-label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+  .stat-bar-bg{height:8px;border-radius:4px;background:var(--bg);overflow:hidden}
+  .stat-bar-fill{height:100%;border-radius:4px;transition:width 0.6s cubic-bezier(.34,1.56,.64,1)}
+  .stat-value{font-size:18px;font-weight:900}
+  .pet-message{margin:10px 20px 0;background:var(--surface);border-radius:var(--radius-sm);padding:12px 16px;font-size:14px;font-weight:600;color:var(--text);position:relative;text-align:center;border:1px solid var(--surface2)}
+  .pet-message::before{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--surface)}
+  .tabs{display:flex;gap:6px;margin:16px 20px 0}
+  .tab{flex:1;padding:10px 0;border:none;border-radius:30px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.2s;background:var(--surface);color:var(--text2)}
+  .tab.active{background:var(--accent);color:var(--bg)}
+  .panel{display:none;padding:14px 20px 0;animation:fadeIn 0.3s ease}
+  .panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .section-title{font-size:13px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
 
-  /* STATS */
-  .stats-row { display: flex; gap: 10px; width: 100%; padding: 10px 20px 0; }
-  .stat-card {
-    flex: 1; background: var(--surface);
-    border-radius: var(--radius-sm); padding: 12px;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .stat-label {
-    font-size: 11px; font-weight: 700; color: var(--text2);
-    text-transform: uppercase; letter-spacing: 0.5px;
-    display: flex; align-items: center; gap: 4px;
-  }
-  .stat-bar-bg { height: 8px; border-radius: 4px; background: var(--bg); overflow: hidden; }
-  .stat-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s cubic-bezier(.34,1.56,.64,1); }
-  .stat-value { font-size: 18px; font-weight: 900; }
-
-  /* MESSAGE BUBBLE */
-  .pet-message {
-    margin: 10px 20px 0;
-    background: var(--surface);
-    border-radius: var(--radius-sm);
-    padding: 12px 16px;
-    font-size: 14px; font-weight: 600; color: var(--text);
-    position: relative; text-align: center;
-    border: 1px solid var(--surface2);
-  }
-  .pet-message::before {
-    content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
-    border-left: 8px solid transparent; border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--surface);
-  }
-
-  /* TABS */
-  .tabs { display: flex; gap: 6px; margin: 16px 20px 0; }
-  .tab {
-    flex: 1; padding: 10px 0; border: none; border-radius: 30px;
-    font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800;
-    cursor: pointer; transition: all 0.2s;
-    background: var(--surface); color: var(--text2);
-  }
-  .tab.active { background: var(--accent); color: var(--bg); }
-
-  /* PANELS */
-  .panel { display: none; padding: 14px 20px 0; animation: fadeIn 0.3s ease; }
-  .panel.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-  .section-title {
-    font-size: 13px; font-weight: 800; color: var(--text2);
-    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;
-  }
-
-  /* MEAL CARDS */
-  .meal-grid { display: flex; flex-direction: column; gap: 8px; }
-  .meal-card {
-    background: var(--surface); border-radius: var(--radius-sm);
-    padding: 14px 16px; display: flex; align-items: center; gap: 12px;
-    border: 2px solid transparent; transition: all 0.2s; cursor: pointer;
-  }
-  .meal-card.checked { border-color: var(--accent); background: #1e2d22; }
-  .meal-icon { font-size: 24px; }
-  .meal-info { flex: 1; }
-  .meal-name { font-size: 15px; font-weight: 800; }
-  .meal-pts { font-size: 12px; color: var(--text2); font-weight: 600; }
-  .meal-check {
-    width: 28px; height: 28px; border-radius: 50%;
-    border: 2.5px solid var(--text2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; transition: all 0.2s; background: transparent;
-  }
-  .meal-card.checked .meal-check { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  /* MEALS 3-level */
+  .meal-grid{display:flex;flex-direction:column;gap:8px}
+  .meal-card{background:var(--surface);border-radius:var(--radius-sm);padding:12px 14px;border:2px solid transparent;transition:all 0.2s}
+  .meal-top{display:flex;align-items:center;gap:10px;cursor:pointer}
+  .meal-icon{font-size:24px}
+  .meal-info{flex:1}
+  .meal-name{font-size:15px;font-weight:800}
+  .meal-pts-hint{font-size:11px;color:var(--text2);font-weight:600}
+  .meal-levels{display:flex;gap:6px;margin-top:10px;animation:fadeIn 0.2s ease}
+  .meal-levels.hidden{display:none}
+  .level-btn{flex:1;padding:8px 4px;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;align-items:center;gap:3px;background:var(--bg);color:var(--text2);border:2px solid var(--surface2)}
+  .level-btn span{font-size:18px}
+  .level-btn.healthy{border-color:var(--accent)}
+  .level-btn.healthy.selected{background:#1e2d22;color:var(--accent)}
+  .level-btn.neutral{border-color:var(--accent3)}
+  .level-btn.neutral.selected{background:#1a2535;color:var(--accent3)}
+  .level-btn.junk{border-color:var(--danger)}
+  .level-btn.junk.selected{background:#2d1a1a;color:var(--danger)}
+  .meal-card.state-healthy{border-color:var(--accent);background:#1e2d22}
+  .meal-card.state-neutral{border-color:var(--accent3);background:#1a2535}
+  .meal-card.state-junk{border-color:var(--danger);background:#2d1a1a}
 
   /* WATER */
-  .water-card { background: var(--surface); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 8px; }
-  .water-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .water-title { font-size: 15px; font-weight: 800; }
-  .water-count { font-size: 18px; font-weight: 900; color: var(--accent3); font-family: 'Space Mono', monospace; }
-  .water-glasses { display: flex; gap: 8px; flex-wrap: wrap; }
-  .glass {
-    width: 36px; height: 36px; border-radius: 8px;
-    border: 2px solid var(--surface2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; cursor: pointer; transition: all 0.15s; background: var(--bg);
-  }
-  .glass.filled { background: #1a2a3a; border-color: var(--accent3); }
-  .glass:active { transform: scale(0.88); }
+  .water-card{background:var(--surface);border-radius:var(--radius-sm);padding:16px;margin-bottom:8px}
+  .water-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .water-title{font-size:15px;font-weight:800}
+  .water-count{font-size:18px;font-weight:900;color:var(--accent3);font-family:'Space Mono',monospace}
+  .water-glasses{display:flex;gap:8px;flex-wrap:wrap}
+  .glass{width:36px;height:36px;border-radius:8px;border:2px solid var(--surface2);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all 0.15s;background:var(--bg)}
+  .glass.filled{background:#1a2a3a;border-color:var(--accent3)}
+  .glass:active{transform:scale(0.88)}
 
   /* FASTING */
-  .fast-card {
-    background: var(--surface); border-radius: var(--radius-sm);
-    padding: 18px; text-align: center; margin-bottom: 8px;
-  }
-  .fast-ring {
-    width: 140px; height: 140px; margin: 0 auto 14px;
-    position: relative; display: flex; align-items: center; justify-content: center;
-  }
-  .fast-ring svg { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
-  .fast-ring-text { position: relative; z-index: 2; }
-  .fast-time { font-size: 28px; font-weight: 900; font-family: 'Space Mono', monospace; color: var(--accent2); }
-  .fast-label { font-size: 11px; color: var(--text2); font-weight: 700; }
-  .fast-actions { display: flex; gap: 10px; margin-top: 14px; }
+  .fast-card{background:var(--surface);border-radius:var(--radius-sm);padding:18px;text-align:center;margin-bottom:8px}
+  .fast-ring{width:140px;height:140px;margin:0 auto 14px;position:relative;display:flex;align-items:center;justify-content:center}
+  .fast-ring svg{position:absolute;top:0;left:0;transform:rotate(-90deg)}
+  .fast-ring-text{position:relative;z-index:2}
+  .fast-time{font-size:28px;font-weight:900;font-family:'Space Mono',monospace;color:var(--accent2)}
+  .fast-label{font-size:11px;color:var(--text2);font-weight:700}
+  .fast-actions{display:flex;gap:10px;margin-top:14px}
+  .fast-setup{display:flex;flex-direction:column;gap:10px}
+  .setup-row{display:flex;align-items:center;gap:10px}
+  .setup-label{font-size:13px;font-weight:700;color:var(--text2);min-width:80px}
+  .setup-input{flex:1;background:var(--bg);border:2px solid var(--surface2);border-radius:10px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;color:var(--text);outline:none}
+  .setup-input:focus{border-color:var(--accent2)}
+  .period-selector{display:flex;gap:6px;flex-wrap:wrap}
+  .period-btn{padding:7px 14px;border-radius:20px;border:2px solid var(--surface2);background:var(--bg);color:var(--text2);font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.2s}
+  .period-btn.selected{border-color:var(--accent2);color:var(--accent2);background:#2a2210}
 
   /* BUTTONS */
-  .btn {
-    flex: 1; padding: 13px; border: none; border-radius: 30px;
-    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .btn:active { transform: scale(0.96); }
-  .btn-primary { background: var(--accent); color: var(--bg); }
-  .btn-secondary { background: var(--surface2); color: var(--text); }
-  .btn-danger { background: var(--danger); color: #fff; }
-  .btn-accent2 { background: var(--accent2); color: var(--bg); }
-
-  /* FAST SETUP */
-  .fast-setup { display: flex; flex-direction: column; gap: 10px; }
-  .setup-row { display: flex; align-items: center; gap: 10px; }
-  .setup-label { font-size: 13px; font-weight: 700; color: var(--text2); min-width: 80px; }
-  .setup-input {
-    flex: 1; background: var(--bg); border: 2px solid var(--surface2);
-    border-radius: 10px; padding: 10px 14px;
-    font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
-    color: var(--text); outline: none;
-  }
-  .setup-input:focus { border-color: var(--accent2); }
-  .period-selector { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
-  .period-btn {
-    padding: 7px 14px; border-radius: 20px; border: 2px solid var(--surface2);
-    background: var(--bg); color: var(--text2);
-    font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .period-btn.selected { border-color: var(--accent2); color: var(--accent2); background: #2a2210; }
+  .btn{flex:1;padding:13px;border:none;border-radius:30px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.2s}
+  .btn:active{transform:scale(0.96)}
+  .btn-primary{background:var(--accent);color:var(--bg)}
+  .btn-secondary{background:var(--surface2);color:var(--text)}
+  .btn-danger{background:var(--danger);color:#fff}
 
   /* CALENDAR */
-  .calendar-card { background: var(--surface); border-radius: var(--radius-sm); padding: 16px; }
-  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .cal-month { font-size: 16px; font-weight: 900; }
-  .cal-nav { background: var(--bg); border: none; color: var(--text); font-size: 18px; cursor: pointer; padding: 4px 10px; border-radius: 8px; }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-  .cal-dow { text-align: center; font-size: 10px; font-weight: 800; color: var(--text2); padding-bottom: 6px; }
-  .cal-day {
-    aspect-ratio: 1; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; cursor: pointer;
-    background: transparent; color: var(--text2); position: relative; transition: all 0.15s;
-  }
-  .cal-day.today { color: var(--text); font-weight: 900; }
-  .cal-day.today::after {
-    content: ''; position: absolute; bottom: 2px;
-    width: 4px; height: 4px; border-radius: 50%; background: var(--accent3);
-  }
-  .cal-day.good { background: #1e2d22; color: var(--accent); }
-  .cal-day.bad { background: #2d1a1a; color: var(--danger); }
-  .cal-day.perfect { background: var(--accent); color: var(--bg); }
-  .cal-day.empty { pointer-events: none; }
-  .streak-cards { display: flex; gap: 8px; margin-top: 12px; }
-  .streak-info { flex: 1; background: var(--bg); border-radius: 10px; padding: 12px; text-align: center; }
-  .streak-num { font-size: 24px; font-weight: 900; font-family: 'Space Mono', monospace; }
-  .streak-txt { font-size: 11px; color: var(--text2); font-weight: 700; }
+  .calendar-card{background:var(--surface);border-radius:var(--radius-sm);padding:16px}
+  .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .cal-month{font-size:16px;font-weight:900}
+  .cal-nav{background:var(--bg);border:none;color:var(--text);font-size:18px;cursor:pointer;padding:4px 10px;border-radius:8px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .cal-dow{text-align:center;font-size:10px;font-weight:800;color:var(--text2);padding-bottom:6px}
+  .cal-day{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:var(--text2);position:relative;transition:all 0.15s}
+  .cal-day.today{color:var(--text);font-weight:900}
+  .cal-day.today::after{content:'';position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:var(--accent3)}
+  .cal-day.good{background:#1e2d22;color:var(--accent)}
+  .cal-day.bad{background:#2d1a1a;color:var(--danger)}
+  .cal-day.perfect{background:var(--accent);color:var(--bg)}
+  .cal-day.empty{pointer-events:none}
+  .streak-cards{display:flex;gap:8px;margin-top:12px}
+  .streak-info{flex:1;background:var(--bg);border-radius:10px;padding:12px;text-align:center}
+  .streak-num{font-size:24px;font-weight:900;font-family:'Space Mono',monospace}
+  .streak-txt{font-size:11px;color:var(--text2);font-weight:700}
 
   /* EXERCISES */
-  .exercise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .exercise-card {
-    background: var(--bg); border-radius: var(--radius-sm); padding: 14px;
-    border: 2px solid transparent; cursor: pointer; transition: all 0.2s; text-align: center;
-  }
-  .exercise-card.checked { border-color: var(--accent2); background: #2a2210; }
-  .exercise-icon { font-size: 28px; margin-bottom: 4px; }
-  .exercise-name { font-size: 13px; font-weight: 800; }
-  .exercise-pts { font-size: 11px; color: var(--text2); font-weight: 600; }
+  .exercise-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .exercise-card{background:var(--bg);border-radius:var(--radius-sm);padding:14px;border:2px solid transparent;cursor:pointer;transition:all 0.2s;text-align:center}
+  .exercise-card.checked{border-color:var(--accent2);background:#2a2210}
+  .exercise-icon{font-size:28px;margin-bottom:4px}
+  .exercise-name{font-size:13px;font-weight:800}
+  .exercise-pts{font-size:11px;color:var(--text2);font-weight:600}
 
   /* BOTTOM NAV */
-  .bottom-nav {
-    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 430px;
-    background: var(--surface); border-top: 1px solid var(--surface2);
-    display: flex; padding: 10px 10px 20px; gap: 4px;
-  }
-  .nav-btn {
-    flex: 1; padding: 8px 0; border: none; border-radius: 12px;
-    background: transparent; color: var(--text2);
-    font-family: 'Nunito', sans-serif; font-size: 10px; font-weight: 800;
-    cursor: pointer; transition: all 0.2s;
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-  }
-  .nav-btn span { font-size: 22px; }
-  .nav-btn.active { color: var(--accent); background: #1e2d22; }
+  .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--surface);border-top:1px solid var(--surface2);display:flex;padding:10px 10px 20px;gap:4px}
+  .nav-btn{flex:1;padding:8px 0;border:none;border-radius:12px;background:transparent;color:var(--text2);font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
+  .nav-btn span{font-size:22px}
+  .nav-btn.active{color:var(--accent);background:#1e2d22}
 
-  /* POINTS POPUP */
-  .pts-popup {
-    position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
-    background: var(--accent); color: var(--bg);
-    border-radius: 30px; padding: 10px 22px;
-    font-size: 18px; font-weight: 900;
-    pointer-events: none; z-index: 200;
-    animation: popUp 1.5s ease forwards; display: none;
-  }
-  @keyframes popUp {
-    0% { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.8); }
-    20% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.1); }
-    60% { opacity: 1; transform: translateX(-50%) translateY(-10px) scale(1); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(-40px) scale(0.9); }
-  }
-  .level-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--surface2); border-radius: 20px; padding: 6px 12px;
-    font-size: 12px; font-weight: 800; color: var(--accent2);
-  }
+  /* POPUP */
+  .pts-popup{position:fixed;top:20%;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--bg);border-radius:30px;padding:10px 22px;font-size:18px;font-weight:900;pointer-events:none;z-index:200;display:none}
+  @keyframes popUp{0%{opacity:0;transform:translateX(-50%) translateY(20px) scale(0.8)}20%{opacity:1;transform:translateX(-50%) translateY(0) scale(1.1)}60%{opacity:1;transform:translateX(-50%) translateY(-10px) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-40px) scale(0.9)}}
+  .level-badge{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:800;color:var(--accent2)}
 
   /* ACHIEVEMENTS */
-  .achievement-list { display: flex; flex-direction: column; gap: 8px; }
-  .achievement {
-    background: var(--surface); border-radius: var(--radius-sm);
-    padding: 14px 16px; display: flex; align-items: center; gap: 12px;
-    opacity: 0.4; transition: opacity 0.3s;
-  }
-  .achievement.unlocked { opacity: 1; }
-  .ach-icon { font-size: 28px; }
-  .ach-info { flex: 1; }
-  .ach-name { font-size: 14px; font-weight: 800; }
-  .ach-desc { font-size: 12px; color: var(--text2); font-weight: 600; }
-  .ach-badge { background: var(--surface2); border-radius: 20px; padding: 4px 10px; font-size: 11px; font-weight: 800; color: var(--accent); }
-  .achievement.unlocked .ach-badge { background: var(--accent); color: var(--bg); }
+  .achievement-list{display:flex;flex-direction:column;gap:8px}
+  .achievement{background:var(--surface);border-radius:var(--radius-sm);padding:14px 16px;display:flex;align-items:center;gap:12px;opacity:0.4;transition:opacity 0.3s}
+  .achievement.unlocked{opacity:1}
+  .ach-icon{font-size:28px}.ach-info{flex:1}.ach-name{font-size:14px;font-weight:800}.ach-desc{font-size:12px;color:var(--text2);font-weight:600}
+  .ach-badge{background:var(--surface2);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:800;color:var(--accent)}
+  .achievement.unlocked .ach-badge{background:var(--accent);color:var(--bg)}
 
   /* SETTINGS */
-  .settings-section { margin-bottom: 20px; }
-  .settings-card { background: var(--surface); border-radius: var(--radius-sm); overflow: hidden; }
-  .settings-row {
-    display: flex; align-items: center; gap: 12px;
-    padding: 14px 16px; border-bottom: 1px solid var(--surface2);
-  }
-  .settings-row:last-child { border-bottom: none; }
-  .settings-icon { font-size: 20px; width: 32px; text-align: center; }
-  .settings-label { flex: 1; font-size: 14px; font-weight: 700; }
-  .settings-sub { font-size: 11px; color: var(--text2); font-weight: 600; }
-  .toggle {
-    width: 44px; height: 26px; border-radius: 13px;
-    background: var(--surface2); position: relative;
-    cursor: pointer; transition: background 0.3s; flex-shrink: 0;
-  }
-  .toggle.on { background: var(--accent); }
-  .toggle::after {
-    content: ''; position: absolute; top: 3px; left: 3px;
-    width: 20px; height: 20px; border-radius: 50%;
-    background: #fff; transition: transform 0.3s;
-  }
-  .toggle.on::after { transform: translateX(18px); }
-  .select-input {
-    background: var(--bg); border: 2px solid var(--surface2);
-    border-radius: 10px; padding: 8px 12px;
-    font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
-    color: var(--text); outline: none; cursor: pointer;
-  }
-  .select-input:focus { border-color: var(--accent); }
-  .text-input {
-    background: var(--bg); border: 2px solid var(--surface2);
-    border-radius: 10px; padding: 10px 14px; width: 100%;
-    font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
-    color: var(--text); outline: none;
-  }
-  .text-input:focus { border-color: var(--accent); }
+  .settings-section{margin-bottom:20px}
+  .settings-card{background:var(--surface);border-radius:var(--radius-sm);overflow:hidden}
+  .settings-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--surface2)}
+  .settings-row:last-child{border-bottom:none}
+  .settings-icon{font-size:20px;width:32px;text-align:center}
+  .settings-label{flex:1;font-size:14px;font-weight:700}
+  .settings-sub{font-size:11px;color:var(--text2);font-weight:600}
+  .toggle{width:44px;height:26px;border-radius:13px;background:var(--surface2);position:relative;cursor:pointer;transition:background 0.3s;flex-shrink:0}
+  .toggle.on{background:var(--accent)}
+  .toggle::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform 0.3s}
+  .toggle.on::after{transform:translateX(18px)}
+  .select-input{background:var(--bg);border:2px solid var(--surface2);border-radius:10px;padding:8px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text);outline:none;cursor:pointer}
+  .text-input{background:var(--bg);border:2px solid var(--surface2);border-radius:10px;padding:10px 14px;width:100%;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;color:var(--text);outline:none}
+  .text-input:focus,.select-input:focus{border-color:var(--accent)}
+  .color-grid{display:flex;gap:8px;flex-wrap:wrap}
+  .color-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all 0.2s}
+  .color-swatch.selected{border-color:#fff;transform:scale(1.15)}
+  .accessory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+  .accessory-btn{background:var(--bg);border:2px solid var(--surface2);border-radius:10px;padding:8px;text-align:center;cursor:pointer;transition:all 0.2s;font-size:20px}
+  .accessory-btn.selected{border-color:var(--accent);background:#1e2d22}
 
-  /* PET CUSTOMIZER */
-  .color-grid { display: flex; gap: 8px; flex-wrap: wrap; }
-  .color-swatch {
-    width: 36px; height: 36px; border-radius: 50%;
-    cursor: pointer; border: 3px solid transparent; transition: all 0.2s;
-  }
-  .color-swatch.selected { border-color: #fff; transform: scale(1.15); }
-  .accessory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
-  .accessory-btn {
-    background: var(--bg); border: 2px solid var(--surface2);
-    border-radius: 10px; padding: 8px; text-align: center;
-    cursor: pointer; transition: all 0.2s; font-size: 20px;
-  }
-  .accessory-btn.selected { border-color: var(--accent); background: #1e2d22; }
+  /* NOTIF BANNER */
+  .notif-banner{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-110%);width:100%;max-width:430px;background:var(--surface2);color:var(--text);padding:14px 16px;z-index:500;display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--accent);transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);cursor:pointer;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+  .notif-banner.show{transform:translateX(-50%) translateY(0)}
+  .notif-banner-icon{font-size:26px}
+  .notif-banner-text{flex:1}
+  .notif-banner-title{font-size:14px;font-weight:900}
+  .notif-banner-body{font-size:12px;color:var(--text2);font-weight:600}
+  .notif-close{font-size:18px;color:var(--text2);background:none;border:none;cursor:pointer;padding:4px}
 
-  /* NOTIFICATION BANNER */
-  .notif-banner {
-    position: fixed; top: 0; left: 50%; transform: translateX(-50%) translateY(-100%);
-    width: 100%; max-width: 430px;
-    background: var(--surface2); color: var(--text);
-    padding: 16px 20px; z-index: 300;
-    display: flex; align-items: center; gap: 12px;
-    border-bottom: 2px solid var(--accent);
-    transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
-    cursor: pointer;
-  }
-  .notif-banner.show { transform: translateX(-50%) translateY(0); }
-  .notif-banner-icon { font-size: 28px; }
-  .notif-banner-text { flex: 1; }
-  .notif-banner-title { font-size: 14px; font-weight: 900; }
-  .notif-banner-body { font-size: 12px; color: var(--text2); font-weight: 600; }
-  .notif-banner-close { font-size: 20px; color: var(--text2); background: none; border: none; cursor: pointer; }
+  /* NOTIF PERMISSION CARD */
+  .notif-perm-card{background:linear-gradient(135deg,#1e2035,#22263a);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;border:1px solid var(--accent3);display:none}
+  .notif-perm-card.show{display:block}
 
-  /* HEALTH DECAY WARNING */
-  .decay-bar {
-    margin: 8px 20px 0;
-    background: var(--surface);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    display: flex; align-items: center; gap: 10px;
-    border: 1px solid var(--danger);
-    display: none;
-  }
-  .decay-bar.visible { display: flex; }
-  .decay-bar-text { font-size: 13px; font-weight: 700; color: var(--danger); }
+  /* DECAY BAR */
+  .decay-bar{margin:8px 20px 0;background:var(--surface);border-radius:var(--radius-sm);padding:10px 14px;display:none;align-items:center;gap:10px;border:1px solid var(--danger)}
+  .decay-bar.visible{display:flex}
 
-  /* PET ANIMATIONS */
-  @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
-  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-  @keyframes bounce { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-  .pet-float { animation: float 3s ease-in-out infinite; }
-  .pet-bounce { animation: bounce 0.5s ease; }
+  /* MIDNIGHT OVERLAY */
+  .midnight-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:600;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:30px;text-align:center}
+  .midnight-overlay.show{display:flex;animation:fadeIn 0.5s ease}
+  .midnight-stars{font-size:48px;margin-bottom:8px}
+  .midnight-title{font-size:26px;font-weight:900}
+  .midnight-body{font-size:15px;color:var(--text2);font-weight:600;line-height:1.6;max-width:300px}
 
-  .scrollable { overflow-y: auto; max-height: calc(100vh - 380px); padding-bottom: 10px; }
+  /* DIET LEGEND */
+  .diet-legend{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+  .legend-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800}
+  .legend-pill.healthy{background:#1e2d22;color:var(--accent)}
+  .legend-pill.neutral{background:#1a2535;color:var(--accent3)}
+  .legend-pill.junk{background:#2d1a1a;color:var(--danger)}
 
-  /* Exercises toggle in settings */
-  .exercise-toggle-grid { display: flex; flex-direction: column; gap: 0; }
+  .scrollable{overflow-y:auto;max-height:calc(100vh - 380px);padding-bottom:10px}
+
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  .pet-float{animation:float 3s ease-in-out infinite}
+  .pet-bounce{animation:bounce 0.5s ease}
 </style>
 </head>
 <body>
 
-<!-- Notification Banner -->
+<!-- Notif banner -->
 <div class="notif-banner" id="notifBanner" onclick="dismissNotif()">
   <div class="notif-banner-icon" id="notifIcon">🐾</div>
   <div class="notif-banner-text">
     <div class="notif-banner-title" id="notifTitle">NutriPet</div>
-    <div class="notif-banner-body" id="notifBody">Mensagem</div>
+    <div class="notif-banner-body" id="notifBody"></div>
   </div>
-  <button class="notif-banner-close">✕</button>
+  <button class="notif-close" onclick="event.stopPropagation();dismissNotif()">✕</button>
 </div>
 
-<!-- Status bar -->
+<!-- Midnight overlay -->
+<div class="midnight-overlay" id="midnightOverlay">
+  <div class="midnight-stars" id="midnightStars">🌙</div>
+  <div class="midnight-title" id="midnightTitle">Novo dia!</div>
+  <div class="midnight-body" id="midnightBody">Seus dados foram salvos.</div>
+  <button class="btn btn-primary" style="width:100%;max-width:280px;margin-top:8px" onclick="dismissMidnight()">Começar novo dia ✨</button>
+</div>
+
+<!-- Status -->
 <div class="status-bar">
   <span id="clockDisplay">09:41</span>
-  <span>🔋 87%</span>
+  <span id="notifStatusIcon">🔔</span>
 </div>
 
 <!-- Header -->
@@ -423,7 +237,7 @@
   <div class="streak-badge" id="streakBadge">🔥 0 dias</div>
 </div>
 
-<!-- Pet Area -->
+<!-- Pet -->
 <div class="pet-area">
   <div class="pet-scene">
     <div class="pet-aura" id="petAura"></div>
@@ -435,38 +249,29 @@
 <!-- Decay warning -->
 <div class="decay-bar" id="decayBar">
   <span>⚠️</span>
-  <span class="decay-bar-text" id="decayBarText">Seu pet está perdendo saúde! Marque suas atividades!</span>
+  <span style="font-size:13px;font-weight:700;color:var(--danger)" id="decayBarText">Seu pet precisa de atenção!</span>
 </div>
 
 <!-- Stats -->
 <div class="stats-row">
   <div class="stat-card">
     <div class="stat-label">❤️ Saúde</div>
-    <div class="stat-bar-bg">
-      <div class="stat-bar-fill" id="healthBar" style="background: linear-gradient(90deg, #ef5350, #ff8a65); width: 80%;"></div>
-    </div>
-    <div class="stat-value" id="healthVal" style="color: #ff8a65;">80</div>
+    <div class="stat-bar-bg"><div class="stat-bar-fill" id="healthBar" style="background:linear-gradient(90deg,#ef5350,#ff8a65);width:80%"></div></div>
+    <div class="stat-value" id="healthVal" style="color:#ff8a65">80</div>
   </div>
   <div class="stat-card">
     <div class="stat-label">😊 Alegria</div>
-    <div class="stat-bar-bg">
-      <div class="stat-bar-fill" id="happyBar" style="background: linear-gradient(90deg, #f9a825, #ffd54f); width: 70%;"></div>
-    </div>
-    <div class="stat-value" id="happyVal" style="color: #f9a825;">70</div>
+    <div class="stat-bar-bg"><div class="stat-bar-fill" id="happyBar" style="background:linear-gradient(90deg,#f9a825,#ffd54f);width:70%"></div></div>
+    <div class="stat-value" id="happyVal" style="color:#f9a825">70</div>
   </div>
   <div class="stat-card">
     <div class="stat-label">⚡ XP</div>
-    <div class="stat-bar-bg">
-      <div class="stat-bar-fill" id="xpBar" style="background: linear-gradient(90deg, #7c4dff, #b388ff); width: 30%;"></div>
-    </div>
-    <div class="stat-value" id="xpVal" style="color: #b388ff;">30</div>
+    <div class="stat-bar-bg"><div class="stat-bar-fill" id="xpBar" style="background:linear-gradient(90deg,#7c4dff,#b388ff);width:30%"></div></div>
+    <div class="stat-value" id="xpVal" style="color:#b388ff">30</div>
   </div>
 </div>
 
-<!-- Pet message bubble -->
 <div class="pet-message" id="petMessage">Oi! Vamos cuidar de mim hoje? 🌱</div>
-
-<!-- Points popup -->
 <div class="pts-popup" id="ptsPopup">+10 XP!</div>
 
 <!-- Tabs -->
@@ -478,9 +283,19 @@
   <button class="tab" onclick="switchTab('config')">⚙️</button>
 </div>
 
-<!-- ═══════════════════════════ HOJE ═══════════════════════════ -->
+<!-- HOJE -->
 <div id="panel-hoje" class="panel active">
   <div class="scrollable">
+    <!-- Notif permission card -->
+    <div class="notif-perm-card" id="notifPermCard">
+      <div style="font-size:15px;font-weight:900;margin-bottom:6px">🔔 Ativar notificações reais?</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;font-weight:600">Para avisos mesmo com o app fechado, precisamos de permissão.</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" style="font-size:13px" onclick="requestNotifPermission()">Permitir</button>
+        <button class="btn btn-secondary" style="font-size:13px" onclick="dismissNotifCard()">Agora não</button>
+      </div>
+    </div>
+
     <div class="section-title">💧 Água do dia</div>
     <div class="water-card">
       <div class="water-header">
@@ -490,28 +305,31 @@
       <div class="water-glasses" id="waterGlasses"></div>
     </div>
 
-    <div class="section-title" style="margin-top:14px;">🍽️ Refeições</div>
+    <div class="section-title" style="margin-top:14px">🍽️ Refeições</div>
+    <div class="diet-legend">
+      <div class="legend-pill healthy">🥗 Saudável +100%</div>
+      <div class="legend-pill neutral">🍽️ Neutro +50%</div>
+      <div class="legend-pill junk">🍔 Fora −saúde</div>
+    </div>
     <div class="meal-grid" id="mealGrid"></div>
 
-    <div class="section-title" style="margin-top:14px;">🏃 Exercício</div>
+    <div class="section-title" style="margin-top:14px">🏋️ Exercício</div>
     <div class="exercise-grid" id="exerciseGrid"></div>
 
-    <div class="section-title" style="margin-top:14px;">📊 Resumo</div>
-    <div class="water-card" style="text-align:center;">
-      <div style="font-size:13px; color:var(--text2); font-weight:700; margin-bottom:8px;">Pontos ganhos hoje</div>
-      <div style="font-size:36px; font-weight:900; color:var(--accent); font-family:'Space Mono',monospace;" id="todayPts">0</div>
-      <div style="font-size:12px; color:var(--text2); margin-top:4px;">Feche o dia para registrar ✅</div>
-      <button class="btn btn-primary" style="margin-top:12px; width:100%;" onclick="closeDay()">Fechar o dia</button>
+    <div class="section-title" style="margin-top:14px">📊 Resumo</div>
+    <div class="water-card" style="text-align:center">
+      <div style="font-size:13px;color:var(--text2);font-weight:700;margin-bottom:8px">Pontos ganhos hoje</div>
+      <div style="font-size:36px;font-weight:900;color:var(--accent);font-family:'Space Mono',monospace" id="todayPts">0</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px">O dia fecha automático à meia-noite 🌙</div>
+      <button class="btn btn-primary" style="margin-top:12px;width:100%" onclick="closeDay(false)">Fechar o dia agora</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════ JEJUM ═══════════════════════════ -->
-<div id="panel-jejum" class="panel">
-  <div id="fastingContent"></div>
-</div>
+<!-- JEJUM -->
+<div id="panel-jejum" class="panel"><div id="fastingContent"></div></div>
 
-<!-- ═══════════════════════════ CALENDÁRIO ═══════════════════════════ -->
+<!-- CALENDÁRIO -->
 <div id="panel-calendario" class="panel">
   <div class="calendar-card">
     <div class="cal-header">
@@ -521,151 +339,106 @@
     </div>
     <div class="cal-grid" id="calGrid"></div>
     <div class="streak-cards">
-      <div class="streak-info">
-        <div class="streak-num" id="currentStreak" style="color:var(--accent);">0</div>
-        <div class="streak-txt">🔥 Sequência</div>
-      </div>
-      <div class="streak-info">
-        <div class="streak-num" id="bestStreak" style="color:var(--accent2);">0</div>
-        <div class="streak-txt">⭐ Melhor</div>
-      </div>
-      <div class="streak-info">
-        <div class="streak-num" id="totalGoodDays" style="color:var(--accent3);">0</div>
-        <div class="streak-txt">✅ Dias bons</div>
-      </div>
+      <div class="streak-info"><div class="streak-num" id="currentStreak" style="color:var(--accent)">0</div><div class="streak-txt">🔥 Sequência</div></div>
+      <div class="streak-info"><div class="streak-num" id="bestStreak" style="color:var(--accent2)">0</div><div class="streak-txt">⭐ Melhor</div></div>
+      <div class="streak-info"><div class="streak-num" id="totalGoodDays" style="color:var(--accent3)">0</div><div class="streak-txt">✅ Dias bons</div></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════ CONQUISTAS ═══════════════════════════ -->
+<!-- CONQUISTAS -->
 <div id="panel-conquistas" class="panel">
   <div class="achievement-list" id="achievementList"></div>
 </div>
 
-<!-- ═══════════════════════════ CONFIG ═══════════════════════════ -->
+<!-- CONFIG -->
 <div id="panel-config" class="panel">
-  <div class="scrollable" style="max-height: calc(100vh - 260px);">
-
-    <!-- Pet Identity -->
+  <div class="scrollable" style="max-height:calc(100vh - 260px)">
     <div class="settings-section">
       <div class="section-title">🐾 Meu Pet</div>
       <div class="settings-card">
-        <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
           <div class="settings-label">Nome do bichinho</div>
           <input type="text" class="text-input" id="petNameInput" placeholder="Ex: Bolinha, Nugget..." maxlength="20" oninput="updatePetName()">
         </div>
-        <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
           <div class="settings-label">Cor do corpinho</div>
           <div class="color-grid" id="bodyColorGrid"></div>
         </div>
-        <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
-          <div class="settings-label">Cor dos detalhes</div>
-          <div class="color-grid" id="detailColorGrid"></div>
-        </div>
-        <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
-          <div class="settings-label">Acessórios</div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <div class="settings-label">Acessório</div>
           <div class="accessory-grid" id="accessoryGrid"></div>
         </div>
-        <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
           <div class="settings-label">Personalidade</div>
           <select class="select-input" id="petPersonality" onchange="savePetConfig()">
-            <option value="fofo">🌸 Fofinho – carinhoso e gentil</option>
-            <option value="animado">⚡ Animado – cheio de energia</option>
-            <option value="filosófico">🌙 Pensativo – sábio e tranquilo</option>
-            <option value="dramático">🎭 Dramático – exagerado e engraçado</option>
+            <option value="fofo">🌸 Fofinho</option>
+            <option value="animado">⚡ Animado</option>
+            <option value="filosófico">🌙 Pensativo</option>
+            <option value="dramático">🎭 Dramático</option>
           </select>
         </div>
       </div>
     </div>
-
-    <!-- Exercises Config -->
     <div class="settings-section">
       <div class="section-title">🏋️ Exercícios Ativos</div>
-      <div class="settings-card exercise-toggle-grid" id="exerciseToggleGrid"></div>
+      <div class="settings-card" id="exerciseToggleGrid"></div>
     </div>
-
-    <!-- Notifications -->
     <div class="settings-section">
       <div class="section-title">🔔 Notificações</div>
       <div class="settings-card">
+        <div class="settings-row" style="cursor:pointer" onclick="requestNotifPermission()">
+          <span class="settings-icon">📱</span>
+          <div style="flex:1"><div class="settings-label">Permissão do sistema</div><div class="settings-sub" id="notifPermLabel">Toque para ativar</div></div>
+          <span id="notifPermStatus">❓</span>
+        </div>
         <div class="settings-row">
           <span class="settings-icon">❤️</span>
-          <div style="flex:1">
-            <div class="settings-label">Alerta de saúde</div>
-            <div class="settings-sub">Quando o pet precisar de atenção</div>
-          </div>
+          <div style="flex:1"><div class="settings-label">Alerta de saúde</div><div class="settings-sub">A cada 6h sem atividade</div></div>
           <div class="toggle on" id="toggle-health" onclick="toggleNotif('health')"></div>
         </div>
         <div class="settings-row">
           <span class="settings-icon">💧</span>
-          <div style="flex:1">
-            <div class="settings-label">Lembrete de água</div>
-            <div class="settings-sub">4x ao dia: 8h, 12h, 15h, 20h</div>
-          </div>
+          <div style="flex:1"><div class="settings-label">Lembrete de água</div><div class="settings-sub">4× ao dia: 8h, 12h, 15h, 20h</div></div>
           <div class="toggle on" id="toggle-water" onclick="toggleNotif('water')"></div>
         </div>
         <div class="settings-row">
           <span class="settings-icon">⏱️</span>
-          <div style="flex:1">
-            <div class="settings-label">Fim do jejum</div>
-            <div class="settings-sub">Aviso quando o jejum acabar</div>
-          </div>
+          <div style="flex:1"><div class="settings-label">Fim do jejum</div><div class="settings-sub">Aviso ao concluir</div></div>
           <div class="toggle on" id="toggle-fast" onclick="toggleNotif('fast')"></div>
         </div>
         <div class="settings-row">
-          <span class="settings-icon">🍽️</span>
-          <div style="flex:1">
-            <div class="settings-label">Lembrete de refeição</div>
-            <div class="settings-sub">A cada 6h sem registrar pontos</div>
-          </div>
-          <div class="toggle on" id="toggle-meal" onclick="toggleNotif('meal')"></div>
-        </div>
-        <div class="settings-row">
           <span class="settings-icon">🌙</span>
-          <div style="flex:1">
-            <div class="settings-label">Fechar o dia</div>
-            <div class="settings-sub">Lembrete às 21h</div>
-          </div>
+          <div style="flex:1"><div class="settings-label">Fechar o dia</div><div class="settings-sub">Lembrete às 21h</div></div>
           <div class="toggle on" id="toggle-close" onclick="toggleNotif('close')"></div>
         </div>
       </div>
     </div>
-
-    <!-- Meta de água -->
     <div class="settings-section">
       <div class="section-title">💧 Meta de Água</div>
       <div class="settings-card">
         <div class="settings-row">
           <span class="settings-icon">🫙</span>
-          <div style="flex:1">
-            <div class="settings-label">Copos por dia</div>
-          </div>
+          <div style="flex:1"><div class="settings-label">Copos por dia</div></div>
           <select class="select-input" id="waterGoalSelect" onchange="updateWaterGoal()">
-            <option value="6">6 copos</option>
-            <option value="8" selected>8 copos</option>
-            <option value="10">10 copos</option>
-            <option value="12">12 copos</option>
+            <option value="6">6</option><option value="8" selected>8</option>
+            <option value="10">10</option><option value="12">12</option>
           </select>
         </div>
       </div>
     </div>
-
-    <!-- Reset -->
     <div class="settings-section">
       <div class="settings-card">
-        <div class="settings-row" style="cursor:pointer;" onclick="resetApp()">
+        <div class="settings-row" style="cursor:pointer" onclick="resetApp()">
           <span class="settings-icon">🗑️</span>
-          <div style="flex:1">
-            <div class="settings-label" style="color:var(--danger);">Recomeçar do zero</div>
-            <div class="settings-sub">Apaga todos os dados</div>
-          </div>
+          <div style="flex:1"><div class="settings-label" style="color:var(--danger)">Recomeçar do zero</div><div class="settings-sub">Apaga todos os dados</div></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Bottom Nav -->
+<!-- Bottom nav -->
 <div class="bottom-nav">
   <button class="nav-btn active" onclick="switchTab('hoje')"><span>🏠</span>Início</button>
   <button class="nav-btn" onclick="switchTab('jejum')"><span>⏱️</span>Jejum</button>
@@ -675,1046 +448,947 @@
 </div>
 
 <script>
-// ════════════════════════════════════════
-//  STATE
-// ════════════════════════════════════════
-const STORAGE_KEY = 'nutripet_v3';
+// ═══════════════════════════════════════════
+//  CONSTANTS
+// ═══════════════════════════════════════════
+const STORAGE_KEY = 'nutripet_v4';
+const ACH_KEY     = 'nutripet_achs_v4';
 
 const ALL_EXERCISES = [
-  { id: 'gym', icon: '💪', name: 'Academia', pts: 18 },
-  { id: 'swim', icon: '🏊', name: 'Natação', pts: 20 },
-  { id: 'bike', icon: '🚴', name: 'Bicicleta', pts: 15 },
-  { id: 'stretch', icon: '🧘', name: 'Alongamento', pts: 10 },
-  { id: 'walk', icon: '🚶', name: 'Caminhada', pts: 12 },
-  { id: 'dance', icon: '💃', name: 'Dança', pts: 14 },
+  {id:'gym',    icon:'💪',name:'Academia',    pts:18},
+  {id:'swim',   icon:'🏊',name:'Natação',     pts:20},
+  {id:'bike',   icon:'🚴',name:'Bicicleta',   pts:15},
+  {id:'stretch',icon:'🧘',name:'Alongamento', pts:10},
+  {id:'walk',   icon:'🚶',name:'Caminhada',   pts:12},
+  {id:'dance',  icon:'💃',name:'Dança',       pts:14},
 ];
+
+const mealDefs = [
+  {id:'breakfast',     icon:'🌅',name:'Café da manhã',    pts:15},
+  {id:'morningSnack',  icon:'🍎',name:'Lanche da manhã',  pts:8},
+  {id:'lunch',         icon:'🥗',name:'Almoço',           pts:20},
+  {id:'afternoonSnack',icon:'🥜',name:'Lanche da tarde',  pts:8},
+  {id:'dinner',        icon:'🌙',name:'Jantar',           pts:15},
+];
+
+// healthDelta / happyDelta applied when meal is set; reversed when cleared or switched
+const MEAL_LEVELS = {
+  healthy:{label:'Saudável',icon:'🥗',xpMult:1.0, healthDelta:+5, happyDelta:+3},
+  neutral:{label:'Neutro',  icon:'🍽️',xpMult:0.5, healthDelta:+1, happyDelta:+1},
+  junk:   {label:'Fora',    icon:'🍔',xpMult:0.0, healthDelta:-6, happyDelta:-2},
+};
 
 const BODY_COLORS = [
-  { name: 'Verde', val: '#a8e6cf', detail: '#4caf50', eye: '#1b5e20' },
-  { name: 'Azul', val: '#b2dfee', detail: '#42a5f5', eye: '#0d47a1' },
-  { name: 'Rosa', val: '#f8bbd9', detail: '#ec407a', eye: '#880e4f' },
-  { name: 'Lilás', val: '#e1bee7', detail: '#9c27b0', eye: '#4a148c' },
-  { name: 'Laranja', val: '#ffe0b2', detail: '#fb8c00', eye: '#e65100' },
-  { name: 'Amarelo', val: '#fff9c4', detail: '#f9a825', eye: '#f57f17' },
-  { name: 'Vermelho', val: '#ffcdd2', detail: '#ef5350', eye: '#b71c1c' },
-  { name: 'Cinza', val: '#cfd8dc', detail: '#546e7a', eye: '#263238' },
+  {name:'Verde',   val:'#a8e6cf',detail:'#4caf50',eye:'#1b5e20'},
+  {name:'Azul',    val:'#b2dfee',detail:'#42a5f5',eye:'#0d47a1'},
+  {name:'Rosa',    val:'#f8bbd9',detail:'#ec407a',eye:'#880e4f'},
+  {name:'Lilás',   val:'#e1bee7',detail:'#9c27b0',eye:'#4a148c'},
+  {name:'Laranja', val:'#ffe0b2',detail:'#fb8c00',eye:'#e65100'},
+  {name:'Amarelo', val:'#fff9c4',detail:'#f9a825',eye:'#f57f17'},
+  {name:'Vermelho',val:'#ffcdd2',detail:'#ef5350',eye:'#b71c1c'},
+  {name:'Cinza',   val:'#cfd8dc',detail:'#546e7a',eye:'#263238'},
 ];
+const ACCESSORIES = ['🎀','🎩','👑','🌸','⭐','🍃','🌈','🎵','🍄','🦋','🌻','❄️'];
 
-const ACCESSORIES = ['🎀', '🎩', '👑', '🌸', '⭐', '🍃', '🌈', '🎵', '🍄', '🦋', '🌻', '❄️'];
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+function todayStr(){return new Date().toISOString().split('T')[0]}
 
-function todayStr() { return new Date().toISOString().split('T')[0]; }
-
-function defaultState() {
+function defaultState(){
   return {
-    health: 80, happiness: 70, xp: 30,
-    water: 0, waterGoal: 8,
-    meals: { breakfast: false, morningSnack: false, lunch: false, afternoonSnack: false, dinner: false },
-    exercises: { gym: false, swim: false, bike: false, stretch: false },
-    activeExercises: ['gym', 'swim', 'bike', 'stretch'],
-    calendar: {}, streak: 0, bestStreak: 0, totalGoodDays: 0,
-    lastDayClosed: null, lastActivityTime: Date.now(),
-    fastingActive: false, fastingStart: null, fastingGoalHours: 16, fastingGoalMinutes: 0,
-    todayDate: todayStr(),
-    pet: {
-      name: 'Bolinha',
-      bodyColor: 0,
-      accessory: '🍃',
-      personality: 'fofo',
-    },
-    notifs: { health: true, water: true, fast: true, meal: true, close: true },
+    health:80,happiness:70,xp:30,
+    water:0,waterGoal:8,
+    meals:{breakfast:null,morningSnack:null,lunch:null,afternoonSnack:null,dinner:null},
+    exercises:{gym:false,swim:false,bike:false,stretch:false},
+    activeExercises:['gym','swim','bike','stretch'],
+    calendar:{},streak:0,bestStreak:0,totalGoodDays:0,
+    lastDayClosed:null,lastActivityTime:Date.now(),
+    fastingActive:false,fastingStart:null,fastingGoalHours:16,fastingGoalMinutes:0,fastingNotifSent:false,
+    todayDate:todayStr(),
+    openMealId:null,
+    pet:{name:'Bolinha',bodyColor:0,accessory:'🍃',personality:'fofo'},
+    notifs:{health:true,water:true,fast:true,close:true},
+    notifDismissed:false,
   };
 }
 
-function applyDecay(s) {
-  if (!s.lastDayClosed) return;
-  const diff = Math.floor((new Date(todayStr()) - new Date(s.lastDayClosed)) / 86400000);
-  if (diff >= 15) { s.health = 0; s.happiness = 0; }
-  else if (diff >= 7) { s.health = Math.max(5, s.health - 30); s.happiness = Math.max(0, s.happiness - 25); }
-  else { s.health = Math.max(10, s.health - 8 * diff); s.happiness = Math.max(10, s.happiness - 6 * diff); }
+function applyDecay(s){
+  if(!s.lastDayClosed)return;
+  const diff=Math.floor((new Date(todayStr())-new Date(s.lastDayClosed))/86400000);
+  if(diff>=15){s.health=0;s.happiness=0}
+  else if(diff>=7){s.health=Math.max(5,s.health-30);s.happiness=Math.max(0,s.happiness-25)}
+  else if(diff>=1){s.health=Math.max(10,s.health-8*diff);s.happiness=Math.max(10,s.happiness-6*diff)}
 }
 
-function loadState() {
-  try {
-    const s = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (!s) return defaultState();
-    if (!s.pet) s.pet = defaultState().pet;
-    if (!s.notifs) s.notifs = defaultState().notifs;
-    if (!s.activeExercises) s.activeExercises = ['gym', 'swim', 'bike', 'stretch'];
-    if (!s.lastActivityTime) s.lastActivityTime = Date.now();
-    if (s.todayDate !== todayStr()) {
-      s.water = 0;
-      s.meals = { breakfast: false, morningSnack: false, lunch: false, afternoonSnack: false, dinner: false };
-      const exObj = {};
-      s.activeExercises.forEach(id => exObj[id] = false);
-      s.exercises = exObj;
-      s.todayDate = todayStr();
-      if (s.lastDayClosed !== todayStr()) applyDecay(s);
+function loadState(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw)return defaultState();
+    const s=JSON.parse(raw);
+    if(!s.pet)s.pet=defaultState().pet;
+    if(!s.notifs)s.notifs=defaultState().notifs;
+    if(!s.activeExercises)s.activeExercises=['gym','swim','bike','stretch'];
+    if(!s.lastActivityTime)s.lastActivityTime=Date.now();
+    if(s.openMealId===undefined)s.openMealId=null;
+    if(s.notifDismissed===undefined)s.notifDismissed=false;
+    // Migrate old boolean meals
+    if(s.meals){
+      Object.keys(s.meals).forEach(k=>{
+        if(s.meals[k]===true) s.meals[k]='healthy';
+        if(s.meals[k]===false)s.meals[k]=null;
+      });
     }
     return s;
-  } catch(e) { return defaultState(); }
+  }catch(e){return defaultState()}
 }
 
-let state = loadState();
-function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+let state=loadState();
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+let unlockedAchs=JSON.parse(localStorage.getItem(ACH_KEY)||'[]');
 
-let unlockedAchs = JSON.parse(localStorage.getItem('nutripet_achs_v2') || '[]');
+// ═══════════════════════════════════════════
+//  DAY ROLLOVER — AUTO MIDNIGHT
+// ═══════════════════════════════════════════
+function checkDayRollover(){
+  const today=todayStr();
+  if(state.todayDate===today)return; // same day, nothing to do
 
-// ════════════════════════════════════════
-//  PET RENDERING — COMPLEX SVG
-// ════════════════════════════════════════
-function getPetState() {
-  const avg = (state.health + state.happiness) / 2;
-  if (state.health <= 0) return 'dead';
-  if (avg >= 85) return 'great';
-  if (avg >= 60) return 'good';
-  if (avg >= 35) return 'tired';
-  if (avg >= 15) return 'sick';
-  return 'verysick';
+  // Auto-close yesterday silently if user didn't
+  if(state.lastDayClosed!==state.todayDate){
+    performDayClose(state.todayDate,true);
+  }
+
+  // Reset daily data
+  state.water=0;
+  state.meals={breakfast:null,morningSnack:null,lunch:null,afternoonSnack:null,dinner:null};
+  const exObj={};
+  state.activeExercises.forEach(id=>exObj[id]=false);
+  state.exercises=exObj;
+  state.openMealId=null;
+  state.todayDate=today;
+  applyDecay(state);
+  saveState();
+  showMidnightOverlay();
+  renderAll();
 }
 
-const petMessages = {
-  fofo: {
-    great: ['Estou tão feliz! Você é o melhor! 💕', 'Adorei minha comidinha hoje! 🌸', 'Tô radiante de alegria! ✨'],
-    good: ['Tô bem! Continua assim, tá? 🥰', 'Que dia gostoso! Quase perfeito! 💪'],
-    tired: ['Tô um pouquinho cansada... me cuida? 🥺', 'Precisando de carinho e comida boa... 😔'],
-    sick: ['Ai... não tô nada bem... socorro! 🤒', 'Tô muito doentinha... alimentação! 😷'],
-    verysick: ['Faz dias que não cuida de mim... 😭', 'Tô passando muito mal...'],
-    dead: ['Fui de tristeza... 15 dias sem cuidado 💀'],
+function performDayClose(dateStr,silent=false){
+  // Score based on meal quality
+  const mealsScore=Object.values(state.meals).reduce((acc,v)=>{
+    if(v==='healthy')return acc+1;
+    if(v==='neutral')return acc+0.5;
+    return acc;
+  },0);
+  const exerciseDone=getActiveExercises().some(e=>state.exercises[e.id]);
+  const waterFull=state.water>=state.waterGoal;
+  const score=mealsScore+(exerciseDone?1:0)+(waterFull?0.5:0);
+
+  let rating='bad';
+  if(score>=4.5)rating='perfect';
+  else if(score>=2)rating='good';
+
+  state.calendar[dateStr]=rating;
+
+  if(rating!=='bad'){
+    state.streak++;
+    state.bestStreak=Math.max(state.streak,state.bestStreak);
+    state.totalGoodDays++;
+    if(state.streak%7===0){givePoints(50,15,15);if(!silent)showPopup(`🎉 ${state.streak} dias! +50 XP!`)}
+    if(rating==='perfect')givePoints(25,10,10);
+    else givePoints(10,5,5);
+  }else{
+    state.streak=0;
+    state.health=Math.max(0,state.health-10);
+    state.happiness=Math.max(0,state.happiness-8);
+  }
+  state.lastDayClosed=dateStr;
+  saveState();
+  checkAchievements();
+  return rating;
+}
+
+function closeDay(silent=false){
+  const today=todayStr();
+  if(state.lastDayClosed===today){
+    if(!silent)sendNotifBanner('🌙','Já fechou!','O dia de hoje já foi registrado.');
+    return;
+  }
+  const rating=performDayClose(today,silent);
+  renderPet();renderCalendar();
+  if(!silent){
+    const msgs={
+      perfect:`🌟 Dia perfeito! ${state.pet.name} está radiante!`,
+      good:`✅ Bom dia! ${state.pet.name} agradece!`,
+      bad:`😔 Dia difícil... amanhã é uma nova chance!`,
+    };
+    setTimeout(()=>alert(msgs[rating]),100);
+  }
+}
+
+function showMidnightOverlay(){
+  const name=state.pet.name;
+  // get rating from the day that just ended
+  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+  const yStr=yesterday.toISOString().split('T')[0];
+  const r=state.calendar[yStr]||'good';
+  const stars={perfect:'🌟✨🌙',good:'✅🌙',bad:'😔🌙'};
+  const msgs={
+    perfect:`Dia incrível! ${name} adorou cada refeição! Descanse bem 💕`,
+    good:`Bom dia! ${name} sorriu ao adormecer 🌙`,
+    bad:`Ontem foi difícil, mas hoje é uma nova chance! ${name} acredita em você 💪`,
+  };
+  document.getElementById('midnightStars').textContent=stars[r]||'🌙';
+  document.getElementById('midnightTitle').textContent='Novo dia começando!';
+  document.getElementById('midnightBody').textContent=msgs[r]||`${name} aguarda um novo dia incrível!`;
+  document.getElementById('midnightOverlay').classList.add('show');
+}
+function dismissMidnight(){document.getElementById('midnightOverlay').classList.remove('show')}
+
+// ═══════════════════════════════════════════
+//  PET SVG RENDERING
+// ═══════════════════════════════════════════
+function getPetState(){
+  const avg=(state.health+state.happiness)/2;
+  if(state.health<=0)return'dead';
+  if(avg>=85)return'great';
+  if(avg>=60)return'good';
+  if(avg>=35)return'tired';
+  if(avg>=15)return'sick';
+  return'verysick';
+}
+
+const petMessages={
+  fofo:{
+    great:['Estou tão feliz! Você é o melhor! 💕','Adorei minha comidinha hoje! 🌸','Tô radiante de alegria! ✨'],
+    good:['Tô bem! Continua assim, tá? 🥰','Que dia gostoso! Quase perfeito! 💪'],
+    tired:['Tô um pouquinho cansado... me cuida? 🥺','Precisando de carinho e comida boa... 😔'],
+    sick:['Ai... não tô nada bem... socorro! 🤒','Tô muito doentinho... alimentação! 😷'],
+    verysick:['Faz dias que não cuida de mim... 😭','Tô passando muito mal...'],
+    dead:['Fui de tristeza... 15 dias sem cuidado 💀'],
   },
-  animado: {
-    great: ['VAMO QUE VAMO! Dia TOP! 🚀💥', 'Missão saúde: CONCLUÍDA! 🏆'],
-    good: ['Energia no tanque! Bora mais! ⚡', 'Quase no topo! Falta pouco! 💪'],
-    tired: ['Opa, combustível baixo... bora comer! 🍎', 'Preciso de reabastecimento urgente! ⛽'],
-    sick: ['Sistema com erro... requer manutenção! 🔧', 'ALERTA VERMELHO! Precisa de atenção! 🚨'],
-    verysick: ['CRÍTICO! Pet em colapso iminente! 💥'],
-    dead: ['Game over... mas pode recomeçar! 🎮'],
+  animado:{
+    great:['VAMO QUE VAMO! Dia TOP! 🚀💥','Missão saúde: CONCLUÍDA! 🏆'],
+    good:['Energia no tanque! Bora mais! ⚡','Quase no topo! Falta pouco! 💪'],
+    tired:['Opa, combustível baixo... bora comer! 🍎','Preciso de reabastecimento urgente! ⛽'],
+    sick:['Sistema com erro... requer manutenção! 🔧','ALERTA VERMELHO! 🚨'],
+    verysick:['CRÍTICO! Pet em colapso iminente! 💥'],
+    dead:['Game over... mas pode recomeçar! 🎮'],
   },
-  filosófico: {
-    great: ['A harmonia do corpo e alma é o tesouro máximo 🌙✨', 'Equilíbrio: alcançado. Beleza. 🍃'],
-    good: ['O caminho da saúde é longo, mas valioso 🌿', 'Cada passo importa. Você está no caminho. 🌅'],
-    tired: ['Até as estrelas precisam descansar... 🌙', 'O cansaço fala. O corpo pede atenção, escuta. 🧘'],
-    sick: ['A doença é o silêncio do corpo pedindo socorro 🌫️', 'Cuida-me, para que eu possa te cuidar. 🙏'],
-    verysick: ['No limite da existência... nutri-me 🌑'],
-    dead: ['Tudo que não é nutrido, murcha 🍂'],
+  'filosófico':{
+    great:['A harmonia do corpo e alma é o tesouro máximo 🌙✨','Equilíbrio: alcançado. 🍃'],
+    good:['O caminho da saúde é longo, mas valioso 🌿','Cada passo importa. Você está no caminho. 🌅'],
+    tired:['Até as estrelas precisam descansar... 🌙','O cansaço fala. Escuta. 🧘'],
+    sick:['A doença é o silêncio do corpo pedindo socorro 🌫️','Cuida-me. 🙏'],
+    verysick:['No limite da existência... nutri-me 🌑'],
+    dead:['Tudo que não é nutrido, murcha 🍂'],
   },
-  dramático: {
-    great: ['MEU DEUS! QUE DIA MARAVILHOSO! ✨🎭', 'Nunca me senti TÃO VIVO! Isso é ARTE! 🌟'],
-    good: ['Bom, mas poderia ser ÉPICO... 🎭', 'Razoavelmente glorioso! Quase insuportavelmente bom! 💫'],
-    tired: ['Ai, ai, ai... minha alma sofre... 😩', 'Não é possível... este abandono me consome! 😱'],
-    sick: ['TRAGÉDIA! Uma catástrofe nutricional! 😭🎭', 'Faço um apelo: SALVA-ME com vegetais! 🥦'],
-    verysick: ['Este é o meu fim... ou será? Drama máximo 💔'],
-    dead: ['Perei. Foi belíssimo. Chorem por mim. 💀🌹'],
+  'dramático':{
+    great:['MEU DEUS! QUE DIA MARAVILHOSO! ✨🎭','Nunca me senti TÃO VIVO! 🌟'],
+    good:['Bom, mas poderia ser ÉPICO... 🎭','Razoavelmente glorioso! 💫'],
+    tired:['Ai, ai, ai... minha alma sofre... 😩','Este abandono me consome! 😱'],
+    sick:['TRAGÉDIA! Uma catástrofe nutricional! 😭🎭','SALVA-ME com vegetais! 🥦'],
+    verysick:['Este é o meu fim... ou será? 💔'],
+    dead:['Perei. Foi belíssimo. 💀🌹'],
   },
 };
 
-function getPetMessage() {
-  const ps = getPetState();
-  const personality = state.pet.personality || 'fofo';
-  const msgs = petMessages[personality][ps];
-  return msgs[Math.floor(Math.random() * msgs.length)];
+function getPetMessage(){
+  const ps=getPetState(),p=state.pet.personality||'fofo';
+  const msgs=petMessages[p][ps];
+  return msgs[Math.floor(Math.random()*msgs.length)];
 }
 
-function renderPet() {
-  const ps = getPetState();
-  const colorDef = BODY_COLORS[state.pet.bodyColor || 0];
-  const bodyC = colorDef.val;
-  const detailC = colorDef.detail;
-  const eyeC = colorDef.eye;
-  const accessory = state.pet.accessory || '🍃';
+function renderPet(){
+  const ps=getPetState();
+  const c=BODY_COLORS[state.pet.bodyColor||0];
+  const [bodyC,detailC,eyeC]=[c.val,c.detail,c.eye];
+  const acc=state.pet.accessory||'🍃';
 
-  const auras = {
-    great: `radial-gradient(circle, ${detailC}88 0%, transparent 70%)`,
-    good: `radial-gradient(circle, ${detailC}66 0%, transparent 70%)`,
-    tired: `radial-gradient(circle, #f9a82588 0%, transparent 70%)`,
-    sick: `radial-gradient(circle, #ef535088 0%, transparent 70%)`,
-    verysick: `radial-gradient(circle, #7b1fa288 0%, transparent 70%)`,
-    dead: `radial-gradient(circle, #37474f88 0%, transparent 70%)`,
+  const auras={
+    great:`radial-gradient(circle,${detailC}88 0%,transparent 70%)`,
+    good:`radial-gradient(circle,${detailC}66 0%,transparent 70%)`,
+    tired:'radial-gradient(circle,#f9a82588 0%,transparent 70%)',
+    sick:'radial-gradient(circle,#ef535088 0%,transparent 70%)',
+    verysick:'radial-gradient(circle,#7b1fa288 0%,transparent 70%)',
+    dead:'radial-gradient(circle,#37474f88 0%,transparent 70%)',
   };
+  document.getElementById('petAura').style.background=auras[ps];
 
-  document.getElementById('petAura').style.background = auras[ps];
-
-  // Expressions
-  const eyeSVGs = {
-    great: `
-      <!-- Happy eyes with shine -->
-      <ellipse cx="38" cy="60" rx="7" ry="7" fill="${eyeC}"/>
-      <ellipse cx="62" cy="60" rx="7" ry="7" fill="${eyeC}"/>
-      <circle cx="40" cy="58" r="2.5" fill="white"/>
-      <circle cx="64" cy="58" r="2.5" fill="white"/>
-      <!-- Stars in eyes -->
-      <text x="35" y="64" font-size="8">★</text>
-      <text x="59" y="64" font-size="8">★</text>
-    `,
-    good: `
-      <ellipse cx="38" cy="61" rx="6" ry="6" fill="${eyeC}"/>
-      <ellipse cx="62" cy="61" rx="6" ry="6" fill="${eyeC}"/>
-      <circle cx="40" cy="59" r="2" fill="white"/>
-      <circle cx="64" cy="59" r="2" fill="white"/>
-    `,
-    tired: `
-      <ellipse cx="38" cy="63" rx="6" ry="4" fill="${eyeC}"/>
-      <ellipse cx="62" cy="63" rx="6" ry="4" fill="${eyeC}"/>
-      <!-- Droopy eyelids -->
-      <rect x="31" y="60" width="14" height="5" rx="3" fill="${bodyC}" opacity="0.8"/>
-      <rect x="55" y="60" width="14" height="5" rx="3" fill="${bodyC}" opacity="0.8"/>
-    `,
-    sick: `
-      <text x="29" y="68" font-size="16">✕</text>
-      <text x="53" y="68" font-size="16">✕</text>
-      <!-- Swirls -->
-      <text x="32" y="66" font-size="10" fill="${eyeC}" opacity="0.5">~</text>
-      <text x="56" y="66" font-size="10" fill="${eyeC}" opacity="0.5">~</text>
-    `,
-    verysick: `
-      <text x="28" y="68" font-size="16">😵</text>
-      <text x="52" y="68" font-size="16">😵</text>
-    `,
-    dead: `
-      <text x="30" y="68" font-size="14">✕</text>
-      <text x="54" y="68" font-size="14">✕</text>
-    `,
+  const eyes={
+    great:`<ellipse cx="38" cy="60" rx="7" ry="7" fill="${eyeC}"/><ellipse cx="62" cy="60" rx="7" ry="7" fill="${eyeC}"/><circle cx="40" cy="58" r="2.5" fill="white"/><circle cx="64" cy="58" r="2.5" fill="white"/><text x="35" y="64" font-size="8" fill="white">★</text><text x="59" y="64" font-size="8" fill="white">★</text>`,
+    good:`<ellipse cx="38" cy="61" rx="6" ry="6" fill="${eyeC}"/><ellipse cx="62" cy="61" rx="6" ry="6" fill="${eyeC}"/><circle cx="40" cy="59" r="2" fill="white"/><circle cx="64" cy="59" r="2" fill="white"/>`,
+    tired:`<ellipse cx="38" cy="63" rx="6" ry="4" fill="${eyeC}"/><ellipse cx="62" cy="63" rx="6" ry="4" fill="${eyeC}"/><rect x="31" y="60" width="14" height="5" rx="3" fill="${bodyC}" opacity="0.85"/><rect x="55" y="60" width="14" height="5" rx="3" fill="${bodyC}" opacity="0.85"/>`,
+    sick:`<text x="29" y="68" font-size="16" fill="${eyeC}">✕</text><text x="53" y="68" font-size="16" fill="${eyeC}">✕</text>`,
+    verysick:`<text x="28" y="68" font-size="15" fill="${eyeC}">✕</text><text x="54" y="68" font-size="15" fill="${eyeC}">✕</text><text x="36" y="60" font-size="8" fill="${eyeC}" opacity="0.5">~</text><text x="58" y="60" font-size="8" fill="${eyeC}" opacity="0.5">~</text>`,
+    dead:`<text x="30" y="68" font-size="14" fill="${eyeC}">✕</text><text x="54" y="68" font-size="14" fill="${eyeC}">✕</text>`,
   };
-
-  const mouths = {
-    great: `<path d="M36 76 Q50 88 64 76" stroke="${eyeC}" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <ellipse cx="50" cy="80" rx="8" ry="5" fill="${detailC}" opacity="0.25"/>`,
-    good: `<path d="M38 76 Q50 83 62 76" stroke="${eyeC}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
-    tired: `<path d="M40 78 Q50 76 60 78" stroke="${eyeC}" stroke-width="2" fill="none" stroke-linecap="round"/>`,
-    sick: `<path d="M40 80 Q50 75 60 80" stroke="${eyeC}" stroke-width="2" fill="none" stroke-linecap="round"/>`,
-    verysick: `<path d="M40 82 Q50 76 60 82" stroke="${eyeC}" stroke-width="2" fill="none"/>`,
-    dead: `<path d="M40 80 Q50 74 60 80" stroke="${eyeC}" stroke-width="1.5" fill="none"/>`,
+  const mouths={
+    great:`<path d="M36 76 Q50 89 64 76" stroke="${eyeC}" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="80" rx="8" ry="5" fill="${detailC}" opacity="0.2"/>`,
+    good:`<path d="M38 76 Q50 83 62 76" stroke="${eyeC}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    tired:`<path d="M40 78 Q50 76 60 78" stroke="${eyeC}" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+    sick:`<path d="M40 80 Q50 75 60 80" stroke="${eyeC}" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+    verysick:`<path d="M40 82 Q50 76 60 82" stroke="${eyeC}" stroke-width="2" fill="none"/>`,
+    dead:`<path d="M40 80 Q50 74 60 80" stroke="${eyeC}" stroke-width="1.5" fill="none"/>`,
   };
+  const cheeks=(ps==='great'||ps==='good')?`<ellipse cx="28" cy="72" rx="9" ry="6" fill="#f48fb1" opacity="0.35"/><ellipse cx="72" cy="72" rx="9" ry="6" fill="#f48fb1" opacity="0.35"/>`:'';
+  let extras='';
+  if(ps==='great')extras=`<text x="50" y="18" text-anchor="middle" font-size="13">${acc}</text><text x="16" y="35" font-size="10">✨</text><text x="80" y="35" font-size="10">✨</text>`;
+  else if(ps==='good')extras=`<text x="50" y="18" text-anchor="middle" font-size="13">${acc}</text>`;
+  else if(ps==='tired')extras=`<text x="50" y="20" text-anchor="middle" font-size="12">💤</text>`;
+  else if(ps==='sick'||ps==='verysick')extras=`<text x="50" y="18" text-anchor="middle" font-size="12">🤒</text><text x="72" y="30" font-size="10">💦</text>`;
+  else if(ps==='dead')extras=`<text x="50" y="20" text-anchor="middle" font-size="16">💀</text>`;
+  const sickDots=(ps==='sick'||ps==='verysick')?`<circle cx="42" cy="90" r="3" fill="#ef5350" opacity="0.4"/><circle cx="58" cy="86" r="2" fill="#ef5350" opacity="0.35"/><circle cx="48" cy="94" r="2.5" fill="#ef5350" opacity="0.3"/>` :'';
 
-  const cheeks = (ps === 'great' || ps === 'good') ? `
-    <ellipse cx="28" cy="72" rx="9" ry="6" fill="#f48fb1" opacity="0.35"/>
-    <ellipse cx="72" cy="72" rx="9" ry="6" fill="#f48fb1" opacity="0.35"/>
-  ` : '';
+  document.getElementById('petSvg').innerHTML=`
+<svg width="130" height="130" viewBox="0 0 100 125" xmlns="http://www.w3.org/2000/svg">
+  ${extras}
+  <ellipse cx="50" cy="118" rx="22" ry="5" fill="#000" opacity="0.15"/>
+  <ellipse cx="85" cy="98" rx="10" ry="6" fill="${bodyC}" transform="rotate(-20,85,98)"/>
+  <ellipse cx="92" cy="88" rx="7" ry="5" fill="${bodyC}" transform="rotate(-35,92,88)" opacity="0.7"/>
+  <ellipse cx="50" cy="96" rx="26" ry="20" fill="${bodyC}"/>
+  ${sickDots}
+  <ellipse cx="50" cy="100" rx="16" ry="10" fill="${detailC}" opacity="0.18"/>
+  <circle cx="50" cy="102" r="2" fill="${detailC}" opacity="0.3"/>
+  <circle cx="50" cy="55" r="33" fill="${bodyC}"/>
+  <ellipse cx="38" cy="40" rx="10" ry="7" fill="white" opacity="0.12" transform="rotate(-30,38,40)"/>
+  <circle cx="50" cy="52" r="25" fill="${detailC}" opacity="0.1"/>
+  <ellipse cx="20" cy="32" rx="10" ry="14" fill="${bodyC}"/>
+  <ellipse cx="80" cy="32" rx="10" ry="14" fill="${bodyC}"/>
+  <ellipse cx="20" cy="32" rx="6" ry="9" fill="${detailC}" opacity="0.35"/>
+  <ellipse cx="80" cy="32" rx="6" ry="9" fill="${detailC}" opacity="0.35"/>
+  ${eyes[ps]}
+  ${cheeks}
+  <ellipse cx="50" cy="71" rx="4" ry="2.5" fill="${eyeC}" opacity="0.5"/>
+  <ellipse cx="49" cy="70.5" rx="1" ry="0.8" fill="white" opacity="0.5"/>
+  <line x1="18" y1="68" x2="36" y2="71" stroke="${eyeC}" stroke-width="1" opacity="0.3"/>
+  <line x1="18" y1="72" x2="36" y2="73" stroke="${eyeC}" stroke-width="1" opacity="0.3"/>
+  <line x1="82" y1="68" x2="64" y2="71" stroke="${eyeC}" stroke-width="1" opacity="0.3"/>
+  <line x1="82" y1="72" x2="64" y2="73" stroke="${eyeC}" stroke-width="1" opacity="0.3"/>
+  ${mouths[ps]||''}
+  <ellipse cx="26" cy="108" rx="12" ry="7" fill="${bodyC}"/>
+  <ellipse cx="74" cy="108" rx="12" ry="7" fill="${bodyC}"/>
+  <circle cx="22" cy="108" r="2" fill="${detailC}" opacity="0.3"/>
+  <circle cx="26" cy="110" r="2" fill="${detailC}" opacity="0.3"/>
+  <circle cx="30" cy="108" r="2" fill="${detailC}" opacity="0.3"/>
+  <circle cx="70" cy="108" r="2" fill="${detailC}" opacity="0.3"/>
+  <circle cx="74" cy="110" r="2" fill="${detailC}" opacity="0.3"/>
+  <circle cx="78" cy="108" r="2" fill="${detailC}" opacity="0.3"/>
+</svg>`;
 
-  // Extras & accessories
-  let extras = '';
-  if (ps === 'great') {
-    extras = `
-      <text x="50" y="18" text-anchor="middle" font-size="13">${accessory}</text>
-      <text x="16" y="35" font-size="10">✨</text>
-      <text x="80" y="35" font-size="10">✨</text>
-      <text x="14" y="55" font-size="9">⭐</text>
-      <text x="80" y="58" font-size="9">⭐</text>
-    `;
-  } else if (ps === 'good') {
-    extras = `<text x="50" y="18" text-anchor="middle" font-size="13">${accessory}</text>`;
-  } else if (ps === 'tired') {
-    extras = `<text x="50" y="20" text-anchor="middle" font-size="12">💤</text>`;
-  } else if (ps === 'sick' || ps === 'verysick') {
-    extras = `
-      <text x="50" y="18" text-anchor="middle" font-size="12">🤒</text>
-      <text x="72" y="30" font-size="10">💦</text>
-    `;
-  } else if (ps === 'dead') {
-    extras = `<text x="50" y="20" text-anchor="middle" font-size="16">💀</text>`;
-  }
-
-  // Tail
-  const tailColor = bodyC;
-  const tail = `
-    <ellipse cx="85" cy="98" rx="10" ry="6" fill="${tailColor}" transform="rotate(-20, 85, 98)"/>
-    <ellipse cx="92" cy="88" rx="7" ry="5" fill="${tailColor}" transform="rotate(-35, 92, 88)" opacity="0.7"/>
-  `;
-
-  // Paws
-  const paws = `
-    <ellipse cx="26" cy="108" rx="12" ry="7" fill="${bodyC}"/>
-    <ellipse cx="74" cy="108" rx="12" ry="7" fill="${bodyC}"/>
-    <!-- Paw details -->
-    <circle cx="22" cy="108" r="2" fill="${detailC}" opacity="0.3"/>
-    <circle cx="26" cy="110" r="2" fill="${detailC}" opacity="0.3"/>
-    <circle cx="30" cy="108" r="2" fill="${detailC}" opacity="0.3"/>
-    <circle cx="70" cy="108" r="2" fill="${detailC}" opacity="0.3"/>
-    <circle cx="74" cy="110" r="2" fill="${detailC}" opacity="0.3"/>
-    <circle cx="78" cy="108" r="2" fill="${detailC}" opacity="0.3"/>
-  `;
-
-  // Belly
-  const belly = `
-    <ellipse cx="50" cy="100" rx="16" ry="10" fill="${detailC}" opacity="0.18"/>
-    <!-- Belly button -->
-    <circle cx="50" cy="102" r="2" fill="${detailC}" opacity="0.3"/>
-  `;
-
-  // Nose
-  const nose = `
-    <ellipse cx="50" cy="71" rx="4" ry="2.5" fill="${eyeC}" opacity="0.5"/>
-    <ellipse cx="49" cy="70.5" rx="1" ry="0.8" fill="white" opacity="0.5"/>
-  `;
-
-  // Whiskers
-  const whiskers = `
-    <line x1="18" y1="68" x2="36" y2="71" stroke="${eyeC}" stroke-width="1" opacity="0.3"/>
-    <line x1="18" y1="72" x2="36" y2="73" stroke="${eyeC}" stroke-width="1" opacity="0.3"/>
-    <line x1="82" y1="68" x2="64" y2="71" stroke="${eyeC}" stroke-width="1" opacity="0.3"/>
-    <line x1="82" y1="72" x2="64" y2="73" stroke="${eyeC}" stroke-width="1" opacity="0.3"/>
-  `;
-
-  // Health dots on body (when sick)
-  const sickDots = (ps === 'sick' || ps === 'verysick') ? `
-    <circle cx="42" cy="90" r="3" fill="#ef5350" opacity="0.4"/>
-    <circle cx="58" cy="86" r="2" fill="#ef5350" opacity="0.35"/>
-    <circle cx="48" cy="94" r="2.5" fill="#ef5350" opacity="0.3"/>
-  ` : '';
-
-  const svg = `
-    <svg width="130" height="130" viewBox="0 0 100 125" xmlns="http://www.w3.org/2000/svg">
-      ${extras}
-      <!-- Shadow -->
-      <ellipse cx="50" cy="118" rx="22" ry="5" fill="#000" opacity="0.15"/>
-      <!-- Tail -->
-      ${tail}
-      <!-- Body -->
-      <ellipse cx="50" cy="96" rx="26" ry="20" fill="${bodyC}"/>
-      <!-- Body sheen -->
-      <ellipse cx="42" cy="88" rx="8" ry="5" fill="white" opacity="0.1" transform="rotate(-20,42,88)"/>
-      ${sickDots}
-      ${belly}
-      <!-- Head -->
-      <circle cx="50" cy="55" r="33" fill="${bodyC}"/>
-      <!-- Head sheen -->
-      <ellipse cx="38" cy="40" rx="10" ry="7" fill="white" opacity="0.12" transform="rotate(-30,38,40)"/>
-      <!-- Inner head glow -->
-      <circle cx="50" cy="52" r="25" fill="${detailC}" opacity="0.1"/>
-      <!-- Ears -->
-      <ellipse cx="20" cy="32" rx="10" ry="14" fill="${bodyC}"/>
-      <ellipse cx="80" cy="32" rx="10" ry="14" fill="${bodyC}"/>
-      <!-- Inner ears -->
-      <ellipse cx="20" cy="32" rx="6" ry="9" fill="${detailC}" opacity="0.35"/>
-      <ellipse cx="80" cy="32" rx="6" ry="9" fill="${detailC}" opacity="0.35"/>
-      <!-- Ear tips -->
-      <circle cx="20" cy="20" r="3" fill="${detailC}" opacity="0.2"/>
-      <circle cx="80" cy="20" r="3" fill="${detailC}" opacity="0.2"/>
-      <!-- Eyes -->
-      ${eyeSVGs[ps]}
-      <!-- Cheeks -->
-      ${cheeks}
-      <!-- Nose -->
-      ${nose}
-      <!-- Whiskers -->
-      ${whiskers}
-      <!-- Mouth -->
-      ${mouths[ps] || ''}
-      <!-- Paws -->
-      ${paws}
-    </svg>
-  `;
-
-  document.getElementById('petSvg').innerHTML = svg;
-  document.getElementById('petMessage').textContent = getPetMessage();
-  document.getElementById('petNameDisplay').textContent = state.pet.name || 'Bolinha';
-  updateBars();
-  updateLevel();
-  updateDecayWarning();
+  document.getElementById('petMessage').textContent=getPetMessage();
+  document.getElementById('petNameDisplay').textContent=state.pet.name||'Bolinha';
+  updateBars();updateLevel();updateDecayWarning();
 }
 
-function updateBars() {
-  const h = Math.max(0, Math.min(100, state.health));
-  const hp = Math.max(0, Math.min(100, state.happiness));
-  const xp = state.xp % 100;
-  document.getElementById('healthBar').style.width = h + '%';
-  document.getElementById('happyBar').style.width = hp + '%';
-  document.getElementById('xpBar').style.width = xp + '%';
-  document.getElementById('healthVal').textContent = Math.round(h);
-  document.getElementById('happyVal').textContent = Math.round(hp);
-  document.getElementById('xpVal').textContent = Math.round(state.xp);
-  document.getElementById('streakBadge').textContent = `🔥 ${state.streak} dias`;
+function updateBars(){
+  const h=Math.max(0,Math.min(100,state.health));
+  const hp=Math.max(0,Math.min(100,state.happiness));
+  const xp=state.xp%100;
+  document.getElementById('healthBar').style.width=h+'%';
+  document.getElementById('happyBar').style.width=hp+'%';
+  document.getElementById('xpBar').style.width=xp+'%';
+  document.getElementById('healthVal').textContent=Math.round(h);
+  document.getElementById('happyVal').textContent=Math.round(hp);
+  document.getElementById('xpVal').textContent=Math.round(state.xp);
+  document.getElementById('streakBadge').textContent=`🔥 ${state.streak} dias`;
 }
 
-function updateLevel() {
-  const level = Math.floor(state.xp / 100) + 1;
-  const names = ['Iniciante','Explorador','Saudável','Disciplinado','Campeão','Lenda Viva','Imortal'];
-  const name = names[Math.min(level - 1, names.length - 1)];
-  document.getElementById('levelBadge').textContent = `⭐ Nível ${level} · ${name}`;
+function updateLevel(){
+  const lv=Math.floor(state.xp/100)+1;
+  const names=['Iniciante','Explorador','Saudável','Disciplinado','Campeão','Lenda Viva','Imortal'];
+  document.getElementById('levelBadge').textContent=`⭐ Nível ${lv} · ${names[Math.min(lv-1,names.length-1)]}`;
 }
 
-function updateDecayWarning() {
-  const bar = document.getElementById('decayBar');
-  const txt = document.getElementById('decayBarText');
-  if (!state.lastDayClosed) { bar.classList.remove('visible'); return; }
-  const diff = Math.floor((new Date(todayStr()) - new Date(state.lastDayClosed)) / 86400000);
-  if (diff >= 2) {
-    bar.classList.add('visible');
-    txt.textContent = `⚠️ ${diff} dias sem fechar o dia! ${state.pet.name} está sofrendo!`;
-  } else if (state.health < 40) {
-    bar.classList.add('visible');
-    txt.textContent = `❤️ ${state.pet.name} precisa de atenção agora! Marque suas atividades!`;
-  } else {
-    bar.classList.remove('visible');
-  }
+function updateDecayWarning(){
+  const bar=document.getElementById('decayBar');
+  const txt=document.getElementById('decayBarText');
+  if(!state.lastDayClosed){bar.classList.remove('visible');return}
+  const diff=Math.floor((new Date(todayStr())-new Date(state.lastDayClosed))/86400000);
+  if(diff>=2){bar.classList.add('visible');txt.textContent=`⚠️ ${diff} dias sem fechar! ${state.pet.name} está sofrendo!`}
+  else if(state.health<40){bar.classList.add('visible');txt.textContent=`❤️ ${state.pet.name} precisa de atenção! Registre suas refeições!`}
+  else{bar.classList.remove('visible')}
 }
 
-// ════════════════════════════════════════
-//  PET TAP REACTION
-// ════════════════════════════════════════
-function petTap() {
-  const svg = document.getElementById('petSvg');
-  svg.classList.remove('pet-float', 'pet-bounce');
+function petTap(){
+  const svg=document.getElementById('petSvg');
+  svg.classList.remove('pet-float','pet-bounce');
   void svg.offsetWidth;
   svg.classList.add('pet-bounce');
-  setTimeout(() => { svg.classList.remove('pet-bounce'); svg.classList.add('pet-float'); }, 600);
-
-  const ps = getPetState();
-  const personality = state.pet.personality || 'fofo';
-  const msgs = petMessages[personality][ps];
-  document.getElementById('petMessage').textContent = msgs[Math.floor(Math.random() * msgs.length)];
-
-  if (ps === 'great') {
-    state.happiness = Math.min(100, state.happiness + 1);
-    saveState();
-  }
+  setTimeout(()=>{svg.classList.remove('pet-bounce');svg.classList.add('pet-float')},600);
+  document.getElementById('petMessage').textContent=getPetMessage();
+  if(getPetState()==='great'){state.happiness=Math.min(100,state.happiness+1);saveState()}
 }
 
-// ════════════════════════════════════════
-//  MEALS
-// ════════════════════════════════════════
-const mealDefs = [
-  { id: 'breakfast', icon: '🌅', name: 'Café da manhã', pts: 15 },
-  { id: 'morningSnack', icon: '🍎', name: 'Lanche da manhã', pts: 8 },
-  { id: 'lunch', icon: '🥗', name: 'Almoço', pts: 20 },
-  { id: 'afternoonSnack', icon: '🥜', name: 'Lanche da tarde', pts: 8 },
-  { id: 'dinner', icon: '🌙', name: 'Jantar', pts: 15 },
-];
-
-function renderMeals() {
-  const grid = document.getElementById('mealGrid');
-  grid.innerHTML = mealDefs.map(m => `
-    <div class="meal-card ${state.meals[m.id] ? 'checked' : ''}" onclick="toggleMeal('${m.id}')">
-      <div class="meal-icon">${m.icon}</div>
-      <div class="meal-info">
-        <div class="meal-name">${m.name}</div>
-        <div class="meal-pts">+${m.pts} XP se saudável</div>
+// ═══════════════════════════════════════════
+//  MEALS — 3-LEVEL
+// ═══════════════════════════════════════════
+function renderMeals(){
+  document.getElementById('mealGrid').innerHTML=mealDefs.map(m=>{
+    const cur=state.meals[m.id];
+    const isOpen=state.openMealId===m.id;
+    const cardCls=cur?`meal-card state-${cur}`:'meal-card';
+    let hint='Toque para registrar';
+    if(cur){
+      const lv=MEAL_LEVELS[cur];
+      const xg=Math.round(m.pts*lv.xpMult);
+      hint=`${lv.icon} ${lv.label} · ${xg>0?'+'+xg+' XP':'sem XP'}`;
+    }
+    const lvBtns=Object.entries(MEAL_LEVELS).map(([key,lv])=>`
+      <button class="level-btn ${key} ${cur===key?'selected':''}" onclick="setMealLevel('${m.id}','${key}')">
+        <span>${lv.icon}</span>${lv.label}
+        <small style="font-size:9px;opacity:0.8">${key==='healthy'?'+'+m.pts+' XP':key==='neutral'?'+'+Math.round(m.pts*0.5)+' XP':'−saúde'}</small>
+      </button>`).join('');
+    const clearBtn=cur?`<button class="level-btn" style="flex:0.5;border-color:var(--surface2)" onclick="clearMeal('${m.id}')"><span>✕</span><small style="font-size:9px">Limpar</small></button>`:'';
+    return`<div class="${cardCls}" id="mcard-${m.id}">
+      <div class="meal-top" onclick="toggleMealExpand('${m.id}')">
+        <div class="meal-icon">${m.icon}</div>
+        <div class="meal-info"><div class="meal-name">${m.name}</div><div class="meal-pts-hint">${hint}</div></div>
+        <div style="font-size:20px;color:var(--text2)">${isOpen?'▲':(cur?MEAL_LEVELS[cur].icon:'▼')}</div>
       </div>
-      <div class="meal-check">${state.meals[m.id] ? '✓' : ''}</div>
-    </div>
-  `).join('');
+      <div class="meal-levels ${isOpen?'':'hidden'}">${lvBtns}${clearBtn}</div>
+    </div>`;
+  }).join('');
 }
 
-function toggleMeal(id) {
-  const def = mealDefs.find(m => m.id === id);
-  if (!state.meals[id]) {
-    state.meals[id] = true;
-    state.lastActivityTime = Date.now();
-    givePoints(def.pts, 4, 3);
-    showPopup(`+${def.pts} XP 🍽️`);
-  } else {
-    state.meals[id] = false;
-    state.health = Math.max(0, state.health - 2);
-    state.happiness = Math.max(0, state.happiness - 1);
-    state.xp = Math.max(0, state.xp - def.pts);
+function toggleMealExpand(id){
+  state.openMealId=(state.openMealId===id)?null:id;
+  renderMeals();
+}
+
+function setMealLevel(id,level){
+  const def=mealDefs.find(m=>m.id===id);
+  const lv=MEAL_LEVELS[level];
+  const prev=state.meals[id];
+
+  // Undo previous effect
+  if(prev&&prev!==level){
+    const p=MEAL_LEVELS[prev];
+    state.xp=Math.max(0,state.xp-Math.round(def.pts*p.xpMult));
+    state.health=Math.min(100,Math.max(0,state.health-p.healthDelta));
+    state.happiness=Math.min(100,Math.max(0,state.happiness-p.happyDelta));
   }
-  saveState(); renderMeals(); updateTodayPts(); renderPet();
+  if(prev===level){clearMeal(id);return}
+
+  state.meals[id]=level;
+  state.lastActivityTime=Date.now();
+  const xpGain=Math.round(def.pts*lv.xpMult);
+  givePoints(xpGain,lv.healthDelta,lv.happyDelta);
+  if(xpGain>0)showPopup(`+${xpGain} XP ${lv.icon}`);
+  else if(level==='junk')showPopup(`💔 −saúde`);
+  state.openMealId=null;
+  saveState();renderMeals();updateTodayPts();renderPet();
 }
 
-// ════════════════════════════════════════
-//  EXERCISES (dynamic based on active list)
-// ════════════════════════════════════════
-function getActiveExercises() {
-  return ALL_EXERCISES.filter(e => state.activeExercises.includes(e.id));
+function clearMeal(id){
+  const def=mealDefs.find(m=>m.id===id);
+  const prev=state.meals[id];
+  if(prev){
+    const p=MEAL_LEVELS[prev];
+    state.xp=Math.max(0,state.xp-Math.round(def.pts*p.xpMult));
+    state.health=Math.min(100,Math.max(0,state.health-p.healthDelta));
+    state.happiness=Math.min(100,Math.max(0,state.happiness-p.happyDelta));
+  }
+  state.meals[id]=null;
+  state.openMealId=null;
+  saveState();renderMeals();updateTodayPts();renderPet();
 }
 
-function renderExercises() {
-  const grid = document.getElementById('exerciseGrid');
-  const active = getActiveExercises();
-  grid.innerHTML = active.map(e => `
-    <div class="exercise-card ${state.exercises[e.id] ? 'checked' : ''}" onclick="toggleExercise('${e.id}')">
+// ═══════════════════════════════════════════
+//  EXERCISES
+// ═══════════════════════════════════════════
+function getActiveExercises(){return ALL_EXERCISES.filter(e=>state.activeExercises.includes(e.id))}
+
+function renderExercises(){
+  document.getElementById('exerciseGrid').innerHTML=getActiveExercises().map(e=>`
+    <div class="exercise-card ${state.exercises[e.id]?'checked':''}" onclick="toggleExercise('${e.id}')">
       <div class="exercise-icon">${e.icon}</div>
       <div class="exercise-name">${e.name}</div>
       <div class="exercise-pts">+${e.pts} XP</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-function toggleExercise(id) {
-  const def = ALL_EXERCISES.find(e => e.id === id);
-  if (!state.exercises[id]) {
-    state.exercises[id] = true;
-    state.lastActivityTime = Date.now();
-    givePoints(def.pts, 6, 5);
-    showPopup(`+${def.pts} XP 💪`);
-  } else {
-    state.exercises[id] = false;
-    state.xp = Math.max(0, state.xp - def.pts);
-    state.health = Math.max(0, state.health - 3);
+function toggleExercise(id){
+  const def=ALL_EXERCISES.find(e=>e.id===id);
+  if(!state.exercises[id]){
+    state.exercises[id]=true;state.lastActivityTime=Date.now();
+    givePoints(def.pts,6,5);showPopup(`+${def.pts} XP 💪`);
+  }else{
+    state.exercises[id]=false;
+    state.xp=Math.max(0,state.xp-def.pts);state.health=Math.max(0,state.health-3);
   }
-  saveState(); renderExercises(); updateTodayPts(); renderPet();
+  saveState();renderExercises();updateTodayPts();renderPet();
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  WATER
-// ════════════════════════════════════════
-function renderWater() {
-  const glasses = document.getElementById('waterGlasses');
-  glasses.innerHTML = '';
-  for (let i = 0; i < state.waterGoal; i++) {
-    const g = document.createElement('div');
-    g.className = 'glass' + (i < state.water ? ' filled' : '');
-    g.textContent = i < state.water ? '💧' : '🫙';
-    g.onclick = () => toggleWater(i);
-    glasses.appendChild(g);
+// ═══════════════════════════════════════════
+function renderWater(){
+  const g=document.getElementById('waterGlasses');g.innerHTML='';
+  for(let i=0;i<state.waterGoal;i++){
+    const el=document.createElement('div');
+    el.className='glass'+(i<state.water?' filled':'');
+    el.textContent=i<state.water?'💧':'🫙';
+    el.onclick=()=>toggleWater(i);
+    g.appendChild(el);
   }
-  document.getElementById('waterCount').textContent = `${state.water} / ${state.waterGoal}`;
+  document.getElementById('waterCount').textContent=`${state.water} / ${state.waterGoal}`;
 }
 
-function toggleWater(i) {
-  if (i < state.water) {
-    state.water = i;
-  } else {
-    state.water = i + 1;
-    state.lastActivityTime = Date.now();
-    givePoints(3, 2, 1);
-    showPopup('+3 XP 💧');
-    if (state.water === state.waterGoal) {
-      givePoints(10, 5, 8);
-      showPopup(`💧 Meta de água! +10 XP!`);
-    }
+function toggleWater(i){
+  if(i<state.water){state.water=i}
+  else{
+    state.water=i+1;state.lastActivityTime=Date.now();
+    givePoints(3,2,1);showPopup('+3 XP 💧');
+    if(state.water===state.waterGoal){givePoints(10,5,8);showPopup('💧 Meta! +10 XP!')}
   }
-  saveState(); renderWater(); updateTodayPts(); renderPet();
+  saveState();renderWater();updateTodayPts();renderPet();
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  POINTS
-// ════════════════════════════════════════
-function givePoints(xp, health, happy) {
-  state.xp += xp;
-  state.health = Math.min(100, state.health + health);
-  state.happiness = Math.min(100, state.happiness + happy);
+// ═══════════════════════════════════════════
+function givePoints(xp,health,happy){
+  state.xp+=xp;
+  state.health=Math.min(100,Math.max(0,state.health+health));
+  state.happiness=Math.min(100,Math.max(0,state.happiness+happy));
 }
 
-function showPopup(text) {
-  const p = document.getElementById('ptsPopup');
-  p.textContent = text;
-  p.style.display = 'block';
-  p.style.animation = 'none';
-  requestAnimationFrame(() => { p.style.animation = 'popUp 1.5s ease forwards'; });
-  setTimeout(() => { p.style.display = 'none'; }, 1500);
+function showPopup(text){
+  const p=document.getElementById('ptsPopup');
+  p.textContent=text;p.style.display='block';p.style.animation='none';
+  requestAnimationFrame(()=>{p.style.animation='popUp 1.5s ease forwards'});
+  setTimeout(()=>{p.style.display='none'},1500);
 }
 
-function updateTodayPts() {
-  let pts = 0;
-  mealDefs.forEach(m => { if (state.meals[m.id]) pts += m.pts; });
-  getActiveExercises().forEach(e => { if (state.exercises[e.id]) pts += e.pts; });
-  pts += state.water * 3;
-  document.getElementById('todayPts').textContent = pts;
+function updateTodayPts(){
+  let pts=0;
+  mealDefs.forEach(m=>{if(state.meals[m.id])pts+=Math.round(m.pts*MEAL_LEVELS[state.meals[m.id]].xpMult)});
+  getActiveExercises().forEach(e=>{if(state.exercises[e.id])pts+=e.pts});
+  pts+=state.water*3;
+  document.getElementById('todayPts').textContent=pts;
 }
 
-// ════════════════════════════════════════
-//  CLOSE DAY
-// ════════════════════════════════════════
-function closeDay() {
-  const today = todayStr();
-  if (state.lastDayClosed === today) { alert('Você já fechou o dia hoje! 🌙'); return; }
-  const mealsChecked = Object.values(state.meals).filter(Boolean).length;
-  const exerciseDone = getActiveExercises().filter(e => state.exercises[e.id]).length;
-  const waterFull = state.water >= state.waterGoal;
-  let dayRating = 'bad';
-  const score = mealsChecked + (exerciseDone > 0 ? 2 : 0) + (waterFull ? 1 : 0);
-  if (score >= 6) dayRating = 'perfect';
-  else if (score >= 3) dayRating = 'good';
-  state.calendar[today] = dayRating;
-  if (dayRating !== 'bad') {
-    state.streak++;
-    state.bestStreak = Math.max(state.streak, state.bestStreak);
-    state.totalGoodDays++;
-    if (state.streak % 7 === 0) { givePoints(50, 15, 15); showPopup(`🎉 ${state.streak} dias! +50 XP!`); }
-    if (dayRating === 'perfect') givePoints(25, 10, 10);
-    else givePoints(10, 5, 5);
-  } else {
-    state.streak = 0;
-    state.health = Math.max(0, state.health - 10);
-    state.happiness = Math.max(0, state.happiness - 8);
-  }
-  state.lastDayClosed = today;
-  saveState(); renderPet(); renderCalendar(); checkAchievements();
-  const msgs = {
-    perfect: `🌟 Dia perfeito! ${state.pet.name} está radiante!`,
-    good: `✅ Bom dia! ${state.pet.name} agradece!`,
-    bad: `😔 Dia difícil... amanhã é uma nova chance!`,
-  };
-  setTimeout(() => alert(msgs[dayRating]), 100);
-}
-
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  FASTING
-// ════════════════════════════════════════
-let fastingInterval = null;
+// ═══════════════════════════════════════════
+let fastingInterval=null;
 
-function renderFasting() {
-  const el = document.getElementById('fastingContent');
-  if (!state.fastingActive) {
-    el.innerHTML = `
-      <div class="fast-card">
-        <div style="font-size:40px; margin-bottom:10px;">⏱️</div>
-        <div style="font-size:18px; font-weight:900; margin-bottom:6px;">Jejum Intermitente</div>
-        <div style="font-size:13px; color:var(--text2); margin-bottom:18px;">Configure seu período e comece quando quiser</div>
-        <div class="fast-setup">
-          <div class="setup-row">
-            <span class="setup-label">Período</span>
-            <div class="period-selector">
-              ${[12,14,16,18,20,24].map(h => `<button class="period-btn ${state.fastingGoalHours===h?'selected':''}" onclick="selectFastPeriod(${h},event)">${h}h</button>`).join('')}
-            </div>
-          </div>
-          <div class="setup-row" style="margin-top:8px;">
-            <span class="setup-label">Início</span>
-            <input type="time" id="fastStartTime" class="setup-input" value="${new Date().toTimeString().slice(0,5)}">
-          </div>
-          <div class="setup-row">
-            <span class="setup-label">Duração</span>
-            <input type="number" id="fastCustomHours" class="setup-input" min="1" max="24" value="${state.fastingGoalHours}" style="flex:0.4">
-            <span style="color:var(--text2); font-weight:700; font-size:13px;">h</span>
-            <input type="number" id="fastCustomMins" class="setup-input" min="0" max="59" value="${state.fastingGoalMinutes}" style="flex:0.4">
-            <span style="color:var(--text2); font-weight:700; font-size:13px;">min</span>
+function renderFasting(){
+  const el=document.getElementById('fastingContent');
+  if(!state.fastingActive){
+    el.innerHTML=`<div class="fast-card">
+      <div style="font-size:40px;margin-bottom:10px">⏱️</div>
+      <div style="font-size:18px;font-weight:900;margin-bottom:6px">Jejum Intermitente</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:18px">Configure seu período e comece quando quiser</div>
+      <div class="fast-setup">
+        <div class="setup-row">
+          <span class="setup-label">Período</span>
+          <div class="period-selector">
+            ${[12,14,16,18,20,24].map(h=>`<button class="period-btn ${state.fastingGoalHours===h?'selected':''}" onclick="selectFastPeriod(${h},event)">${h}h</button>`).join('')}
           </div>
         </div>
-        <button class="btn btn-primary" style="width:100%; margin-top:16px;" onclick="startFasting()">🚀 Iniciar Jejum</button>
-      </div>
-    `;
-  } else {
-    const now = Date.now();
-    const elapsed = now - state.fastingStart;
-    const goalMs = (state.fastingGoalHours * 60 + state.fastingGoalMinutes) * 60000;
-    const progress = Math.min(1, elapsed / goalMs);
-    const remaining = Math.max(0, goalMs - elapsed);
-    const elH = Math.floor(elapsed / 3600000);
-    const elM = Math.floor((elapsed % 3600000) / 60000);
-    const remH = Math.floor(remaining / 3600000);
-    const remM = Math.floor((remaining % 3600000) / 60000);
-    const breakTime = new Date(state.fastingStart + goalMs);
-    const breakStr = breakTime.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    const circ = 2 * Math.PI * 54;
-    const offset = circ * (1 - progress);
-    const done = progress >= 1;
-    el.innerHTML = `
-      <div class="fast-card">
-        ${done ? `<div style="font-size:13px; font-weight:800; color:var(--accent); margin-bottom:8px;">🎉 JEJUM CONCLUÍDO!</div>` : ''}
-        <div class="fast-ring">
-          <svg width="140" height="140" viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="54" fill="none" stroke="var(--surface2)" stroke-width="8"/>
-            <circle cx="60" cy="60" r="54" fill="none"
-              stroke="${done ? 'var(--accent)' : 'var(--accent2)'}"
-              stroke-width="8" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"
-              stroke-linecap="round" style="transition:stroke-dashoffset 1s ease;"/>
-          </svg>
-          <div class="fast-ring-text">
-            <div class="fast-time">${String(elH).padStart(2,'0')}:${String(elM).padStart(2,'0')}</div>
-            <div class="fast-label">de ${state.fastingGoalHours}h${state.fastingGoalMinutes?state.fastingGoalMinutes+'min':''}</div>
-          </div>
+        <div class="setup-row" style="margin-top:8px">
+          <span class="setup-label">Início</span>
+          <input type="time" id="fastStartTime" class="setup-input" value="${new Date().toTimeString().slice(0,5)}">
         </div>
-        ${!done ? `
-        <div style="font-size:13px; color:var(--text2); margin-bottom:4px;">Quebrará às <strong style="color:var(--accent2)">${breakStr}</strong></div>
-        <div style="font-size:13px; color:var(--text2);">Faltam <strong style="color:var(--text)">${remH}h ${remM}min</strong></div>
-        ` : `<div style="font-size:13px; color:var(--accent); margin-bottom:4px;">${state.pet.name} ficou muito orgulhoso de você! +30 XP! 🏆</div>`}
-        <div class="fast-actions">
-          <button class="btn btn-danger" onclick="breakFasting(false)">Quebrar Jejum</button>
-          ${done ? `<button class="btn btn-primary" onclick="breakFasting(true)">Completar ✓</button>` : ''}
+        <div class="setup-row">
+          <span class="setup-label">Duração</span>
+          <input type="number" id="fastCustomHours" class="setup-input" min="1" max="24" value="${state.fastingGoalHours}" style="flex:0.4">
+          <span style="color:var(--text2);font-weight:700;font-size:13px">h</span>
+          <input type="number" id="fastCustomMins"  class="setup-input" min="0" max="59" value="${state.fastingGoalMinutes}" style="flex:0.4">
+          <span style="color:var(--text2);font-weight:700;font-size:13px">min</span>
         </div>
       </div>
-    `;
+      <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="startFasting()">🚀 Iniciar Jejum</button>
+    </div>`;
+  }else{
+    const now=Date.now(),elapsed=now-state.fastingStart;
+    const goalMs=(state.fastingGoalHours*60+state.fastingGoalMinutes)*60000;
+    const progress=Math.min(1,elapsed/goalMs),remaining=Math.max(0,goalMs-elapsed);
+    const elH=Math.floor(elapsed/3600000),elM=Math.floor((elapsed%3600000)/60000);
+    const remH=Math.floor(remaining/3600000),remM=Math.floor((remaining%3600000)/60000);
+    const breakStr=new Date(state.fastingStart+goalMs).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    const circ=2*Math.PI*54,offset=circ*(1-progress),done=progress>=1;
+    el.innerHTML=`<div class="fast-card">
+      ${done?`<div style="font-size:13px;font-weight:800;color:var(--accent);margin-bottom:8px">🎉 JEJUM CONCLUÍDO!</div>`:''}
+      <div class="fast-ring">
+        <svg width="140" height="140" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="54" fill="none" stroke="var(--surface2)" stroke-width="8"/>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="${done?'var(--accent)':'var(--accent2)'}" stroke-width="8"
+            stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round"
+            style="transition:stroke-dashoffset 1s ease"/>
+        </svg>
+        <div class="fast-ring-text">
+          <div class="fast-time">${String(elH).padStart(2,'0')}:${String(elM).padStart(2,'0')}</div>
+          <div class="fast-label">de ${state.fastingGoalHours}h${state.fastingGoalMinutes?state.fastingGoalMinutes+'min':''}</div>
+        </div>
+      </div>
+      ${!done
+        ?`<div style="font-size:13px;color:var(--text2);margin-bottom:4px">Quebrará às <strong style="color:var(--accent2)">${breakStr}</strong></div>
+           <div style="font-size:13px;color:var(--text2)">Faltam <strong style="color:var(--text)">${remH}h ${remM}min</strong></div>`
+        :`<div style="font-size:13px;color:var(--accent);margin-bottom:4px">${state.pet.name} ficou orgulhoso! +30 XP 🏆</div>`}
+      <div class="fast-actions">
+        <button class="btn btn-danger" onclick="breakFasting(false)">Quebrar Jejum</button>
+        ${done?`<button class="btn btn-primary" onclick="breakFasting(true)">Completar ✓</button>`:''}
+      </div>
+    </div>`;
   }
 }
 
-function selectFastPeriod(h, event) {
-  state.fastingGoalHours = h;
-  state.fastingGoalMinutes = 0;
-  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('selected'));
-  if (event && event.target) event.target.classList.add('selected');
-  if (document.getElementById('fastCustomHours')) document.getElementById('fastCustomHours').value = h;
+function selectFastPeriod(h,event){
+  state.fastingGoalHours=h;state.fastingGoalMinutes=0;
+  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('selected'));
+  if(event&&event.target)event.target.classList.add('selected');
+  const el=document.getElementById('fastCustomHours');if(el)el.value=h;
 }
 
-function startFasting() {
-  const customH = parseInt(document.getElementById('fastCustomHours')?.value) || state.fastingGoalHours;
-  const customM = parseInt(document.getElementById('fastCustomMins')?.value) || 0;
-  const startTimeEl = document.getElementById('fastStartTime');
-  let startMs = Date.now();
-  if (startTimeEl) {
-    const [h, m] = startTimeEl.value.split(':').map(Number);
-    const d = new Date(); d.setHours(h, m, 0, 0);
-    if (d > new Date()) d.setDate(d.getDate() - 1);
-    startMs = d.getTime();
-  }
-  state.fastingGoalHours = customH;
-  state.fastingGoalMinutes = customM;
-  state.fastingActive = true;
-  state.fastingStart = startMs;
-  state.fastingNotifSent = false;
-  saveState(); startFastTimer(); renderFasting();
+function startFasting(){
+  const H=parseInt(document.getElementById('fastCustomHours')?.value)||state.fastingGoalHours;
+  const M=parseInt(document.getElementById('fastCustomMins')?.value)||0;
+  let startMs=Date.now();
+  const stEl=document.getElementById('fastStartTime');
+  if(stEl){const[h,m]=stEl.value.split(':').map(Number);const d=new Date();d.setHours(h,m,0,0);if(d>new Date())d.setDate(d.getDate()-1);startMs=d.getTime()}
+  state.fastingGoalHours=H;state.fastingGoalMinutes=M;
+  state.fastingActive=true;state.fastingStart=startMs;state.fastingNotifSent=false;
+  saveState();startFastTimer();renderFasting();
 }
 
-function breakFasting(completed) {
-  if (completed) { givePoints(30, 12, 10); showPopup('+30 XP ⏱️ Jejum completo!'); }
-  state.fastingActive = false; state.fastingStart = null; state.fastingNotifSent = false;
-  clearInterval(fastingInterval); fastingInterval = null;
-  saveState(); renderPet(); renderFasting();
+function breakFasting(completed){
+  if(completed){givePoints(30,12,10);showPopup('+30 XP ⏱️ Jejum completo!')}
+  state.fastingActive=false;state.fastingStart=null;state.fastingNotifSent=false;
+  clearInterval(fastingInterval);fastingInterval=null;
+  saveState();renderPet();renderFasting();
 }
 
-function startFastTimer() {
+function startFastTimer(){
   clearInterval(fastingInterval);
-  fastingInterval = setInterval(() => {
-    // Check if fasting is done and notify
-    if (state.fastingActive && state.notifs.fast && !state.fastingNotifSent) {
-      const elapsed = Date.now() - state.fastingStart;
-      const goalMs = (state.fastingGoalHours * 60 + state.fastingGoalMinutes) * 60000;
-      if (elapsed >= goalMs) {
-        state.fastingNotifSent = true;
-        saveState();
-        sendNotification('⏱️', `${state.pet.name} conseguiu!`, `Jejum de ${state.fastingGoalHours}h concluído! Hora de se alimentar! 🎉`);
+  fastingInterval=setInterval(()=>{
+    if(state.fastingActive&&state.notifs.fast&&!state.fastingNotifSent){
+      const elapsed=Date.now()-state.fastingStart;
+      const goalMs=(state.fastingGoalHours*60+state.fastingGoalMinutes)*60000;
+      if(elapsed>=goalMs){
+        state.fastingNotifSent=true;saveState();
+        fireNotification('⏱️',`${state.pet.name} conseguiu!`,`Jejum de ${state.fastingGoalHours}h concluído! 🎉`);
       }
     }
-    if (document.getElementById('panel-jejum').classList.contains('active')) renderFasting();
-  }, 30000);
+    if(document.getElementById('panel-jejum').classList.contains('active'))renderFasting();
+  },30000);
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  CALENDAR
-// ════════════════════════════════════════
-let calViewYear = new Date().getFullYear();
-let calViewMonth = new Date().getMonth();
-const ptMonths = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const ptDays = ['D','S','T','Q','Q','S','S'];
+// ═══════════════════════════════════════════
+let calViewYear=new Date().getFullYear(),calViewMonth=new Date().getMonth();
+const ptMonths=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const ptDays=['D','S','T','Q','Q','S','S'];
 
-function renderCalendar() {
-  document.getElementById('calMonth').textContent = `${ptMonths[calViewMonth]} ${calViewYear}`;
-  const grid = document.getElementById('calGrid');
-  grid.innerHTML = ptDays.map(d => `<div class="cal-dow">${d}</div>`).join('');
-  const firstDay = new Date(calViewYear, calViewMonth, 1).getDay();
-  const daysInMonth = new Date(calViewYear, calViewMonth + 1, 0).getDate();
-  const todayD = new Date();
-  for (let i = 0; i < firstDay; i++) grid.innerHTML += `<div class="cal-day empty"></div>`;
-  for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${calViewYear}-${String(calViewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const rating = state.calendar[dateStr];
-    const isToday = d === todayD.getDate() && calViewMonth === todayD.getMonth() && calViewYear === todayD.getFullYear();
-    let cls = 'cal-day';
-    if (isToday) cls += ' today';
-    if (rating === 'perfect') cls += ' perfect';
-    else if (rating === 'good') cls += ' good';
-    else if (rating === 'bad') cls += ' bad';
-    const emoji = rating === 'perfect' ? '⭐' : rating === 'good' ? '✓' : rating === 'bad' ? '✗' : d;
-    grid.innerHTML += `<div class="${cls}">${emoji}</div>`;
+function renderCalendar(){
+  document.getElementById('calMonth').textContent=`${ptMonths[calViewMonth]} ${calViewYear}`;
+  const grid=document.getElementById('calGrid');
+  grid.innerHTML=ptDays.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const firstDay=new Date(calViewYear,calViewMonth,1).getDay();
+  const daysInMonth=new Date(calViewYear,calViewMonth+1,0).getDate();
+  const td=new Date();
+  for(let i=0;i<firstDay;i++)grid.innerHTML+=`<div class="cal-day empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${calViewYear}-${String(calViewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const r=state.calendar[ds];
+    const isToday=d===td.getDate()&&calViewMonth===td.getMonth()&&calViewYear===td.getFullYear();
+    let cls='cal-day'+(isToday?' today':'');
+    if(r==='perfect')cls+=' perfect';else if(r==='good')cls+=' good';else if(r==='bad')cls+=' bad';
+    const em=r==='perfect'?'⭐':r==='good'?'✓':r==='bad'?'✗':d;
+    grid.innerHTML+=`<div class="${cls}">${em}</div>`;
   }
-  document.getElementById('currentStreak').textContent = state.streak;
-  document.getElementById('bestStreak').textContent = state.bestStreak;
-  document.getElementById('totalGoodDays').textContent = state.totalGoodDays;
+  document.getElementById('currentStreak').textContent=state.streak;
+  document.getElementById('bestStreak').textContent=state.bestStreak;
+  document.getElementById('totalGoodDays').textContent=state.totalGoodDays;
 }
 
-function changeMonth(dir) {
-  calViewMonth += dir;
-  if (calViewMonth < 0) { calViewMonth = 11; calViewYear--; }
-  if (calViewMonth > 11) { calViewMonth = 0; calViewYear++; }
+function changeMonth(dir){
+  calViewMonth+=dir;
+  if(calViewMonth<0){calViewMonth=11;calViewYear--}
+  if(calViewMonth>11){calViewMonth=0;calViewYear++}
   renderCalendar();
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  ACHIEVEMENTS
-// ════════════════════════════════════════
-const achievementDefs = [
-  { id: 'first_day', icon: '🌱', name: 'Primeiro Passo', desc: 'Feche seu primeiro dia saudável', check: s => s.totalGoodDays >= 1 },
-  { id: 'week', icon: '🔥', name: 'Semana Incrível', desc: '7 dias seguidos', check: s => s.bestStreak >= 7 },
-  { id: 'two_weeks', icon: '💎', name: 'Duas Semanas', desc: '14 dias seguidos', check: s => s.bestStreak >= 14 },
-  { id: 'month', icon: '👑', name: 'Mestre da Saúde', desc: '30 dias seguidos', check: s => s.bestStreak >= 30 },
-  { id: 'water', icon: '💧', name: 'Hidratado', desc: 'Meta de água em um dia', check: s => s.water >= s.waterGoal },
-  { id: 'fast_done', icon: '⏱️', name: 'Jejuador', desc: 'Complete um jejum', check: s => s.xp >= 130 },
-  { id: 'happy_pet', icon: '😊', name: 'Pet Radiante', desc: 'Alegria acima de 90', check: s => s.happiness >= 90 },
-  { id: 'level5', icon: '⭐', name: 'Nível 5', desc: 'Alcance 500 XP', check: s => s.xp >= 500 },
-  { id: 'swimmer', icon: '🏊', name: 'Nadador', desc: 'Registre natação 5x', check: s => (s.swimCount||0) >= 5 },
+// ═══════════════════════════════════════════
+const achievementDefs=[
+  {id:'first_day', icon:'🌱',name:'Primeiro Passo', desc:'Feche seu primeiro dia',         check:s=>s.totalGoodDays>=1},
+  {id:'week',      icon:'🔥',name:'Semana Incrível',desc:'7 dias seguidos',                check:s=>s.bestStreak>=7},
+  {id:'two_weeks', icon:'💎',name:'Duas Semanas',   desc:'14 dias seguidos',               check:s=>s.bestStreak>=14},
+  {id:'month',     icon:'👑',name:'Mestre da Saúde',desc:'30 dias seguidos',               check:s=>s.bestStreak>=30},
+  {id:'water',     icon:'💧',name:'Hidratado',       desc:'Meta de água em um dia',         check:s=>s.water>=s.waterGoal},
+  {id:'fast_done', icon:'⏱️',name:'Jejuador',        desc:'Complete um jejum',              check:s=>s.xp>=130},
+  {id:'happy_pet', icon:'😊',name:'Pet Radiante',   desc:'Alegria acima de 90',            check:s=>s.happiness>=90},
+  {id:'level5',    icon:'⭐',name:'Nível 5',         desc:'Alcance 500 XP',                check:s=>s.xp>=500},
+  {id:'diet_hero', icon:'🥗',name:'Herói da Dieta', desc:'5 refeições saudáveis num dia',  check:s=>Object.values(s.meals).filter(v=>v==='healthy').length>=5},
 ];
 
-function checkAchievements() {
-  achievementDefs.forEach(a => {
-    if (!unlockedAchs.includes(a.id) && a.check(state)) {
-      unlockedAchs.push(a.id);
-      localStorage.setItem('nutripet_achs_v2', JSON.stringify(unlockedAchs));
-      setTimeout(() => sendNotification('🏆', 'Conquista desbloqueada!', a.name + ' — ' + a.desc), 500);
+function checkAchievements(){
+  achievementDefs.forEach(a=>{
+    if(!unlockedAchs.includes(a.id)&&a.check(state)){
+      unlockedAchs.push(a.id);localStorage.setItem(ACH_KEY,JSON.stringify(unlockedAchs));
+      setTimeout(()=>fireNotification('🏆','Conquista desbloqueada!',`${a.name} — ${a.desc}`),500);
     }
   });
   renderAchievements();
 }
 
-function renderAchievements() {
-  const list = document.getElementById('achievementList');
-  list.innerHTML = achievementDefs.map(a => {
-    const unlocked = unlockedAchs.includes(a.id);
-    return `
-      <div class="achievement ${unlocked ? 'unlocked' : ''}">
-        <div class="ach-icon">${a.icon}</div>
-        <div class="ach-info">
-          <div class="ach-name">${a.name}</div>
-          <div class="ach-desc">${a.desc}</div>
-        </div>
-        <div class="ach-badge">${unlocked ? '✓' : '🔒'}</div>
-      </div>
-    `;
+function renderAchievements(){
+  document.getElementById('achievementList').innerHTML=achievementDefs.map(a=>{
+    const u=unlockedAchs.includes(a.id);
+    return`<div class="achievement ${u?'unlocked':''}">
+      <div class="ach-icon">${a.icon}</div>
+      <div class="ach-info"><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div>
+      <div class="ach-badge">${u?'✓':'🔒'}</div>
+    </div>`;
   }).join('');
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  SETTINGS
-// ════════════════════════════════════════
-function renderSettings() {
-  // Pet name
-  document.getElementById('petNameInput').value = state.pet.name || 'Bolinha';
-
-  // Body colors
-  const bodyGrid = document.getElementById('bodyColorGrid');
-  bodyGrid.innerHTML = BODY_COLORS.map((c, i) => `
-    <div class="color-swatch ${state.pet.bodyColor === i ? 'selected' : ''}"
-      style="background:${c.val}; border-color:${state.pet.bodyColor === i ? c.detail : 'transparent'};"
-      onclick="selectBodyColor(${i})" title="${c.name}"></div>
-  `).join('');
-
-  // Detail colors (same grid, separate selection)
-  const detailGrid = document.getElementById('detailColorGrid');
-  detailGrid.innerHTML = BODY_COLORS.map((c, i) => `
-    <div class="color-swatch ${state.pet.detailColor === i ? 'selected' : ''}"
-      style="background:${c.detail}; border-color:${state.pet.detailColor === i ? '#fff' : 'transparent'};"
-      onclick="selectDetailColor(${i})" title="${c.name}"></div>
-  `).join('');
-
-  // Accessories
-  const accGrid = document.getElementById('accessoryGrid');
-  accGrid.innerHTML = ACCESSORIES.map(a => `
-    <div class="accessory-btn ${state.pet.accessory === a ? 'selected' : ''}" onclick="selectAccessory('${a}')">${a}</div>
-  `).join('');
-
-  // Personality
-  document.getElementById('petPersonality').value = state.pet.personality || 'fofo';
-
-  // Exercise toggles
-  const exGrid = document.getElementById('exerciseToggleGrid');
-  exGrid.innerHTML = ALL_EXERCISES.map(e => `
-    <div class="settings-row">
+// ═══════════════════════════════════════════
+function renderSettings(){
+  document.getElementById('petNameInput').value=state.pet.name||'Bolinha';
+  document.getElementById('bodyColorGrid').innerHTML=BODY_COLORS.map((c,i)=>
+    `<div class="color-swatch ${state.pet.bodyColor===i?'selected':''}" style="background:${c.val};border-color:${state.pet.bodyColor===i?c.detail:'transparent'}" onclick="selectBodyColor(${i})" title="${c.name}"></div>`
+  ).join('');
+  document.getElementById('accessoryGrid').innerHTML=ACCESSORIES.map(a=>
+    `<div class="accessory-btn ${state.pet.accessory===a?'selected':''}" onclick="selectAccessory('${a}')">${a}</div>`
+  ).join('');
+  document.getElementById('petPersonality').value=state.pet.personality||'fofo';
+  document.getElementById('exerciseToggleGrid').innerHTML=ALL_EXERCISES.map(e=>
+    `<div class="settings-row">
       <span class="settings-icon">${e.icon}</span>
-      <div style="flex:1">
-        <div class="settings-label">${e.name}</div>
-        <div class="settings-sub">+${e.pts} XP por sessão</div>
-      </div>
-      <div class="toggle ${state.activeExercises.includes(e.id) ? 'on' : ''}"
-        id="ex-toggle-${e.id}" onclick="toggleExerciseActive('${e.id}')"></div>
-    </div>
-  `).join('');
-
-  // Notification toggles
-  Object.keys(state.notifs).forEach(key => {
-    const el = document.getElementById('toggle-' + key);
-    if (el) {
-      el.className = 'toggle' + (state.notifs[key] ? ' on' : '');
-    }
+      <div style="flex:1"><div class="settings-label">${e.name}</div><div class="settings-sub">+${e.pts} XP</div></div>
+      <div class="toggle ${state.activeExercises.includes(e.id)?'on':''}" onclick="toggleExerciseActive('${e.id}')"></div>
+    </div>`
+  ).join('');
+  Object.keys(state.notifs).forEach(key=>{
+    const el=document.getElementById('toggle-'+key);
+    if(el)el.className='toggle'+(state.notifs[key]?' on':'');
   });
-
-  // Water goal
-  const wg = document.getElementById('waterGoalSelect');
-  if (wg) wg.value = state.waterGoal;
+  const wg=document.getElementById('waterGoalSelect');if(wg)wg.value=state.waterGoal;
+  updateNotifPermUI();
 }
 
-function updatePetName() {
-  const val = document.getElementById('petNameInput').value.trim() || 'Bolinha';
-  state.pet.name = val;
-  document.getElementById('petNameDisplay').textContent = val;
+function updatePetName(){state.pet.name=document.getElementById('petNameInput').value.trim()||'Bolinha';document.getElementById('petNameDisplay').textContent=state.pet.name;saveState()}
+function selectBodyColor(i){state.pet.bodyColor=i;saveState();renderPet();renderSettings()}
+function selectAccessory(a){state.pet.accessory=a;saveState();renderPet();renderSettings()}
+function savePetConfig(){state.pet.personality=document.getElementById('petPersonality').value;saveState()}
+
+function toggleExerciseActive(id){
+  const idx=state.activeExercises.indexOf(id);
+  if(idx>=0){if(state.activeExercises.length<=1)return;state.activeExercises.splice(idx,1);delete state.exercises[id]}
+  else{state.activeExercises.push(id);state.exercises[id]=false}
+  saveState();renderSettings();renderExercises();
+}
+
+function toggleNotif(key){
+  state.notifs[key]=!state.notifs[key];
+  const el=document.getElementById('toggle-'+key);if(el)el.className='toggle'+(state.notifs[key]?' on':'');
   saveState();
 }
 
-function selectBodyColor(i) {
-  state.pet.bodyColor = i;
-  saveState(); renderPet(); renderSettings();
+function updateWaterGoal(){
+  const v=parseInt(document.getElementById('waterGoalSelect').value);
+  state.waterGoal=v;if(state.water>v)state.water=v;
+  saveState();renderWater();
 }
 
-function selectDetailColor(i) {
-  state.pet.detailColor = i;
-  saveState(); renderPet(); renderSettings();
-}
-
-function selectAccessory(a) {
-  state.pet.accessory = a;
-  saveState(); renderPet(); renderSettings();
-}
-
-function savePetConfig() {
-  state.pet.personality = document.getElementById('petPersonality').value;
-  saveState();
-}
-
-function toggleExerciseActive(id) {
-  const idx = state.activeExercises.indexOf(id);
-  if (idx >= 0) {
-    if (state.activeExercises.length <= 1) return; // keep at least 1
-    state.activeExercises.splice(idx, 1);
-    delete state.exercises[id];
-  } else {
-    state.activeExercises.push(id);
-    state.exercises[id] = false;
-  }
-  saveState(); renderSettings(); renderExercises();
-}
-
-function toggleNotif(key) {
-  state.notifs[key] = !state.notifs[key];
-  const el = document.getElementById('toggle-' + key);
-  if (el) el.className = 'toggle' + (state.notifs[key] ? ' on' : '');
-  saveState();
-}
-
-function updateWaterGoal() {
-  const val = parseInt(document.getElementById('waterGoalSelect').value);
-  state.waterGoal = val;
-  if (state.water > val) state.water = val;
-  saveState(); renderWater();
-}
-
-function resetApp() {
-  if (confirm('Tem certeza? Todos os dados do ' + state.pet.name + ' serão apagados!')) {
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem('nutripet_achs_v2');
-    state = defaultState();
-    unlockedAchs = [];
-    init();
+function resetApp(){
+  if(confirm(`Apagar todos os dados de ${state.pet.name}?`)){
+    localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(ACH_KEY);
+    state=defaultState();unlockedAchs=[];init();
   }
 }
 
-// ════════════════════════════════════════
-//  NOTIFICATIONS (in-app banner)
-// ════════════════════════════════════════
-let notifQueue = [];
-let notifShowing = false;
+// ═══════════════════════════════════════════
+//  NOTIFICATIONS
+// ═══════════════════════════════════════════
+let notifQueue=[],notifShowing=false;
 
-function sendNotification(icon, title, body) {
-  notifQueue.push({ icon, title, body });
-  if (!notifShowing) processNotifQueue();
+function sendNotifBanner(icon,title,body){
+  notifQueue.push({icon,title,body});
+  if(!notifShowing)processNotifQueue();
 }
 
-function processNotifQueue() {
-  if (notifQueue.length === 0) { notifShowing = false; return; }
-  notifShowing = true;
-  const { icon, title, body } = notifQueue.shift();
-  document.getElementById('notifIcon').textContent = icon;
-  document.getElementById('notifTitle').textContent = title;
-  document.getElementById('notifBody').textContent = body;
-  const banner = document.getElementById('notifBanner');
+function processNotifQueue(){
+  if(!notifQueue.length){notifShowing=false;return}
+  notifShowing=true;
+  const{icon,title,body}=notifQueue.shift();
+  document.getElementById('notifIcon').textContent=icon;
+  document.getElementById('notifTitle').textContent=title;
+  document.getElementById('notifBody').textContent=body;
+  const banner=document.getElementById('notifBanner');
   banner.classList.add('show');
-  setTimeout(() => {
-    banner.classList.remove('show');
-    setTimeout(() => processNotifQueue(), 400);
-  }, 4000);
+  setTimeout(()=>{banner.classList.remove('show');setTimeout(processNotifQueue,400)},4500);
 }
 
-function dismissNotif() {
+function dismissNotif(){
   document.getElementById('notifBanner').classList.remove('show');
-  setTimeout(() => processNotifQueue(), 400);
+  setTimeout(processNotifQueue,400);
 }
 
-// ════════════════════════════════════════
-//  SCHEDULED NOTIFICATION CHECKS
-// ════════════════════════════════════════
-function checkScheduledNotifs() {
-  const now = new Date();
-  const h = now.getHours();
-  const m = now.getMinutes();
-  const key = `${h}:${String(m).padStart(2,'0')}`;
-  const name = state.pet.name;
-
-  // Water reminders: 8h, 12h, 15h, 20h (check at :00 of each hour)
-  if (state.notifs.water && m === 0) {
-    const waterHours = [8, 12, 15, 20];
-    if (waterHours.includes(h) && state.water < state.waterGoal) {
-      const remaining = state.waterGoal - state.water;
-      sendNotification('💧', `${name} está com sede!`, `Faltam ${remaining} copo${remaining > 1 ? 's' : ''} para bater a meta de hoje! 💧`);
-    }
-  }
-
-  // Health check every 6 hours: if no activity logged
-  if (state.notifs.meal && m === 0 && [6, 12, 18, 0].includes(h)) {
-    const timeSinceActivity = Date.now() - (state.lastActivityTime || Date.now());
-    const hoursInactive = timeSinceActivity / 3600000;
-    if (hoursInactive >= 5.5) {
-      sendNotification('❤️', `${name} está triste...`, `Faz horas sem registrar nada! ${name} está precisando de atenção! 🥺`);
-    }
-  }
-
-  // Health decay warning
-  if (state.notifs.health && m === 0 && h === 10 && state.health < 50) {
-    sendNotification('😟', `${name} não está bem!`, `Saúde em ${Math.round(state.health)}%. Marque suas refeições e exercícios hoje! 💪`);
-  }
-
-  // Close day reminder at 21h
-  if (state.notifs.close && h === 21 && m === 0 && state.lastDayClosed !== todayStr()) {
-    sendNotification('🌙', 'Hora de fechar o dia!', `${name} aguarda o resumo de hoje! Não esqueça de registrar! ✅`);
+// Master fire: in-app banner + Web Notification API
+function fireNotification(icon,title,body){
+  sendNotifBanner(icon,title,body);
+  if('Notification'in window&&Notification.permission==='granted'){
+    try{
+      // Build a tiny SVG data URI for the icon
+      const svgIcon=`data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${encodeURIComponent(icon)}</text></svg>`;
+      const n=new Notification(title,{body,icon:svgIcon,tag:'nutripet-'+Date.now(),silent:false,renotify:true});
+      n.onclick=()=>{window.focus();n.close()};
+    }catch(e){}
   }
 }
 
-// Check every minute
-setInterval(checkScheduledNotifs, 60000);
-
-// Also check health decay in real-time (every 30min)
-setInterval(() => {
-  if (state.notifs.health) {
-    const timeSince = Date.now() - (state.lastActivityTime || Date.now());
-    if (timeSince >= 6 * 3600000 && state.health > 10) {
-      // Gradual health loss during the day if inactive
-      state.health = Math.max(10, state.health - 1);
-      state.happiness = Math.max(10, state.happiness - 0.5);
-      saveState();
-      renderPet();
-    }
+async function requestNotifPermission(){
+  if(!('Notification'in window)){
+    sendNotifBanner('❌','Não suportado','Adicione o app à tela inicial para notificações nativas.');
+    updateNotifPermUI();return;
   }
-}, 30 * 60 * 1000);
-
-// ════════════════════════════════════════
-//  TABS & NAV
-// ════════════════════════════════════════
-function switchTab(id) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + id)?.classList.add('active');
-  const tabMap = { hoje: 0, jejum: 1, calendario: 2, conquistas: 3, config: 4 };
-  document.querySelectorAll('.tab')[tabMap[id]]?.classList.add('active');
-  document.querySelectorAll('.nav-btn')[tabMap[id]]?.classList.add('active');
-  if (id === 'jejum') { renderFasting(); if (state.fastingActive) startFastTimer(); }
-  if (id === 'calendario') renderCalendar();
-  if (id === 'conquistas') renderAchievements();
-  if (id === 'config') renderSettings();
+  if(Notification.permission==='granted'){
+    sendNotifBanner('✅','Já ativado!','Você já recebe notificações do NutriPet.');
+    updateNotifPermUI();return;
+  }
+  const perm=await Notification.requestPermission();
+  updateNotifPermUI();
+  if(perm==='granted'){
+    state.notifDismissed=true;saveState();
+    document.getElementById('notifPermCard').classList.remove('show');
+    sendNotifBanner('🎉','Notificações ativadas!',`${state.pet.name} vai te avisar quando precisar!`);
+  }else{
+    sendNotifBanner('⚠️','Permissão negada','Ative manualmente nas configurações do seu aparelho.');
+  }
 }
 
-// ════════════════════════════════════════
+function updateNotifPermUI(){
+  if(!('Notification'in window)){
+    document.getElementById('notifPermLabel').textContent='Não suportado';
+    document.getElementById('notifPermStatus').textContent='❌';
+    document.getElementById('notifStatusIcon').textContent='🔕';
+    return;
+  }
+  const p=Notification.permission;
+  const lbl={default:'Toque para ativar',granted:'Ativado ✓',denied:'Bloqueado — ative no aparelho'};
+  const ico={default:'❓',granted:'✅',denied:'🚫'};
+  const nav={default:'🔔',granted:'🔔',denied:'🔕'};
+  document.getElementById('notifPermLabel').textContent=lbl[p]||'Toque para ativar';
+  document.getElementById('notifPermStatus').textContent=ico[p]||'❓';
+  document.getElementById('notifStatusIcon').textContent=nav[p]||'🔔';
+}
+
+function dismissNotifCard(){
+  state.notifDismissed=true;saveState();
+  document.getElementById('notifPermCard').classList.remove('show');
+}
+
+// ─ Scheduled checks every 60s ─
+const _notifFired={};
+function checkScheduledNotifs(){
+  const now=new Date(),h=now.getHours(),m=now.getMinutes(),name=state.pet.name;
+  const key=`${h}:${m}`;
+
+  // Water 4× / day at :00
+  if(state.notifs.water&&m===0&&[8,12,15,20].includes(h)&&state.water<state.waterGoal&&!_notifFired[key+':w']){
+    _notifFired[key+':w']=true;
+    const rem=state.waterGoal-state.water;
+    fireNotification('💧',`${name} está com sede!`,`Faltam ${rem} copo${rem>1?'s':''} pra bater a meta! 💧`);
+  }
+
+  // Activity / health every 6h
+  if(state.notifs.health&&m===0&&[6,12,18,0].includes(h)){
+    const inactive=(Date.now()-(state.lastActivityTime||Date.now()))/3600000;
+    if(inactive>=5.5&&!_notifFired[key+':a']){
+      _notifFired[key+':a']=true;
+      fireNotification('❤️',`${name} está triste...`,`${Math.round(inactive)}h sem registrar nada! Ele precisa de você! 🥺`);
+    }
+  }
+
+  // Low health at 10h
+  if(state.notifs.health&&h===10&&m===0&&state.health<50&&!_notifFired[key+':lh']){
+    _notifFired[key+':lh']=true;
+    fireNotification('😟',`${name} não está bem!`,`Saúde em ${Math.round(state.health)}%. Registre refeições e exercícios! 💪`);
+  }
+
+  // Close-day at 21h
+  if(state.notifs.close&&h===21&&m===0&&state.lastDayClosed!==todayStr()&&!_notifFired[key+':cd']){
+    _notifFired[key+':cd']=true;
+    fireNotification('🌙','Hora de fechar o dia!',`${name} aguarda o resumo de hoje! ✅`);
+  }
+
+  // Check midnight rollover
+  checkDayRollover();
+
+  // Gradual health decay > 6h inactive
+  const inactiveH=(Date.now()-(state.lastActivityTime||Date.now()))/3600000;
+  if(inactiveH>=6&&state.health>15){
+    state.health=Math.max(15,state.health-0.5);
+    state.happiness=Math.max(15,state.happiness-0.25);
+    saveState();renderPet();
+  }
+}
+
+setInterval(checkScheduledNotifs,60000);
+
+// ═══════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════
+function switchTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id)?.classList.add('active');
+  const m={hoje:0,jejum:1,calendario:2,conquistas:3,config:4};
+  document.querySelectorAll('.tab')[m[id]]?.classList.add('active');
+  document.querySelectorAll('.nav-btn')[m[id]]?.classList.add('active');
+  if(id==='jejum'){renderFasting();if(state.fastingActive)startFastTimer()}
+  if(id==='calendario')renderCalendar();
+  if(id==='conquistas')renderAchievements();
+  if(id==='config')renderSettings();
+}
+
+// ═══════════════════════════════════════════
 //  CLOCK
-// ════════════════════════════════════════
-function updateClock() {
-  const now = new Date();
-  const h = String(now.getHours()).padStart(2,'0');
-  const m = String(now.getMinutes()).padStart(2,'0');
-  document.getElementById('clockDisplay').textContent = `${h}:${m}`;
+// ═══════════════════════════════════════════
+function updateClock(){
+  const n=new Date();
+  document.getElementById('clockDisplay').textContent=
+    `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
 }
-setInterval(updateClock, 1000);
-updateClock();
+setInterval(updateClock,1000);updateClock();
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  INIT
-// ════════════════════════════════════════
-function init() {
-  renderPet();
-  renderMeals();
-  renderExercises();
-  renderWater();
-  updateTodayPts();
-  checkAchievements();
-  if (state.fastingActive) startFastTimer();
+// ═══════════════════════════════════════════
+function renderAll(){renderPet();renderMeals();renderExercises();renderWater();updateTodayPts()}
 
-  // Decay warning on open
-  if (state.lastDayClosed) {
-    const diff = Math.floor((new Date(todayStr()) - new Date(state.lastDayClosed)) / 86400000);
-    if (diff >= 7 && diff < 15) {
-      setTimeout(() => sendNotification('😢', `${state.pet.name} está muito mal!`, `${diff} dias sem cuidados! Ele precisa de você urgentemente!`), 2000);
-    } else if (diff >= 15) {
-      setTimeout(() => sendNotification('💀', `${state.pet.name} foi embora...`, 'Mais de 15 dias abandonado. Recomeça do zero nas configurações.'), 2000);
-    } else if (diff >= 2) {
-      setTimeout(() => sendNotification('🥺', `${state.pet.name} sentiu sua falta!`, `${diff} dias sem fechar o dia. Que tal cuidar agora?`), 2000);
-    }
-  } else {
-    // First launch greeting
-    setTimeout(() => sendNotification('🌱', `Olá! Sou ${state.pet.name}!`, 'Me personalize nas configurações e comece sua jornada saudável! 💪'), 1500);
+function init(){
+  checkDayRollover(); // handles auto-reset if new day
+  renderAll();
+  checkAchievements();
+  updateNotifPermUI();
+  if(state.fastingActive)startFastTimer();
+
+  // Show permission card if not asked yet
+  if(!state.notifDismissed&&'Notification'in window&&Notification.permission==='default')
+    setTimeout(()=>document.getElementById('notifPermCard').classList.add('show'),1200);
+
+  // Startup messages
+  if(state.lastDayClosed){
+    const diff=Math.floor((new Date(todayStr())-new Date(state.lastDayClosed))/86400000);
+    if(diff>=15)
+      setTimeout(()=>fireNotification('💀',`${state.pet.name} foi embora...`,'Mais de 15 dias abandonado. Recomeça nas configurações.'),2000);
+    else if(diff>=7)
+      setTimeout(()=>fireNotification('😢',`${state.pet.name} está muito mal!`,`${diff} dias sem cuidados!`),2000);
+    else if(diff>=2)
+      setTimeout(()=>fireNotification('🥺',`${state.pet.name} sentiu sua falta!`,`${diff} dias sem fechar o dia.`),2000);
+  }else{
+    setTimeout(()=>fireNotification('🌱',`Olá! Sou ${state.pet.name}!`,'Bora começar a jornada! 💪'),1500);
   }
 }
 
